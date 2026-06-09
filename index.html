@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KMA — AI Adoption</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;--card:#1a1d27;--card2:#131620;--border:#252840;
+  --purple:#7c3aed;--purple-l:#a78bfa;--purple-dim:#5b21b6;--purple-g:#7c3aed22;
+  --green:#10b981;--amber:#f59e0b;--coral:#f43f5e;--blue:#3b82f6;--teal:#14b8a6;
+  --text:#f1f5f9;--text2:#94a3b8;--text3:#64748b;--text4:#475569;
+  --line:#1e2235;
+}
+html{font-size:14px;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{background:var(--card2);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.logo{padding:20px 16px 16px;border-bottom:1px solid var(--line)}
+.logo-title{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:700;color:var(--text);line-height:1.3}
+.logo-sub{font-size:10px;color:var(--text3);margin-top:3px}
+.logo-icon{width:32px;height:32px;background:var(--purple-g);border:1px solid #7c3aed44;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.nav-section{padding:12px 10px 4px;font-size:9px;font-weight:600;color:var(--text4);text-transform:uppercase;letter-spacing:.08em}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:11.5px;color:var(--text2);transition:all .15s;margin:1px 6px;position:relative}
+.nav-item:hover{background:var(--card);color:var(--text)}
+.nav-item.active{background:#7c3aed18;color:var(--purple-l);border:1px solid #7c3aed33}
+.nav-badge{margin-left:auto;font-size:9px;background:var(--border);color:var(--text3);padding:1px 6px;border-radius:10px}
+.nav-item.active .nav-badge{background:#7c3aed22;color:var(--purple-l)}
+.nav-conf{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* MAIN */
+.main{overflow-y:auto;min-height:100vh}
+.main::-webkit-scrollbar{width:5px}
+.main::-webkit-scrollbar-track{background:transparent}
+.main::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+/* PAGE */
+.page{display:none;padding:28px 32px 60px}
+.page.active{display:block}
+
+/* HEADER */
+.page-header{margin-bottom:28px}
+.page-tag{display:inline-block;background:var(--purple-g);border:1px solid #7c3aed44;color:var(--purple-l);font-family:'Unbounded',sans-serif;font-size:8px;letter-spacing:.1em;padding:3px 10px;border-radius:20px;margin-bottom:10px}
+.page-title{font-family:'Unbounded',sans-serif;font-size:22px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:6px}
+.page-sub{font-size:12px;color:var(--text3);line-height:1.6}
+.page-divider{height:1px;background:var(--line);margin:18px 0 24px}
+
+/* STAT CARDS */
+.stats-row{display:grid;gap:12px;margin-bottom:20px}
+.stats-4{grid-template-columns:repeat(4,1fr)}
+.stats-3{grid-template-columns:repeat(3,1fr)}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.stat-card.hi{border-color:#7c3aed44}
+.stat-card.hi::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,#7c3aed12,transparent 60%);pointer-events:none;border-radius:12px}
+.stat-card{position:relative;overflow:hidden}
+.stat-lbl{font-size:10.5px;color:var(--text3);margin-bottom:8px;font-weight:500}
+.stat-val{font-family:'Unbounded',sans-serif;font-size:30px;font-weight:900;color:var(--purple);line-height:1;letter-spacing:-.02em}
+.stat-sub{font-size:10px;color:var(--text4);margin-top:4px;line-height:1.5}
+
+/* SEC TITLE */
+.sec{display:flex;align-items:center;gap:10px;margin:24px 0 14px}
+.sec-txt{font-family:'Unbounded',sans-serif;font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);white-space:nowrap}
+.sec::after{content:'';flex:1;height:1px;background:var(--line)}
+
+/* GRID */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+.card-title{font-size:12px;font-weight:600;color:var(--text);margin-bottom:12px;line-height:1.4}
+
+/* BAR ROWS */
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.bar-lbl{font-size:11px;color:var(--text2);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{flex:1.5;height:8px;background:#1a1d27;border-radius:4px;overflow:hidden;border:1px solid var(--border)}
+.bar-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.16,1,.3,1)}
+.bar-pct{font-family:'Unbounded',sans-serif;font-size:10px;font-weight:700;min-width:34px;text-align:right}
+.bar-vs{font-size:9px;min-width:28px;text-align:right}
+
+/* BADGES */
+.badge{display:inline-block;font-size:9px;font-weight:600;padding:2px 8px;border-radius:20px;margin-bottom:6px}
+.bg{background:#E1F5EE;color:#0F6E56}.bb{background:#E6F1FB;color:#185FA5}.ba{background:#FAEEDA;color:#854F0B}.bc{background:#FAECE7;color:#993C1D}.bp{background:#EEEDFE;color:#534AB7}.bx{background:#f1efee;color:#888780}
+
+/* PRESENCE BAR */
+.presence-bar{display:flex;height:12px;border-radius:6px;overflow:hidden;margin:8px 0}
+.pres-daily{background:var(--green)}
+.pres-reg{background:#059669}
+.pres-try{background:#6ee7b7}
+.pres-watch{background:#d1fae5}
+
+/* CHART CONTAINER */
+.chart-wrap{position:relative;height:280px;margin-bottom:4px}
+.chart-wrap-sm{position:relative;height:180px}
+
+/* INSIGHT CARDS */
+.insight-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.insight-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px 12px 18px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s}
+.insight-card:hover{border-color:#7c3aed44;transform:translateY(-2px)}
+.insight-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
+.ic-green::before{background:var(--green)}.ic-blue::before{background:var(--blue)}.ic-amber::before{background:var(--amber)}.ic-coral::before{background:var(--coral)}.ic-purple::before{background:var(--purple)}
+.ic-num{font-size:9px;color:var(--text4);margin-bottom:3px;font-weight:600;font-family:'Unbounded',sans-serif}
+.ic-big{font-family:'Unbounded',sans-serif;font-size:28px;font-weight:900;color:var(--purple);line-height:1;margin-bottom:8px;letter-spacing:-.02em}
+.ic-title{font-size:11.5px;font-weight:600;color:var(--text);margin-bottom:5px;line-height:1.4}
+.ic-text{font-size:11px;color:var(--text3);line-height:1.65}
+.ic-text b{color:var(--text2);font-weight:600}
+
+/* TEAM CARD */
+.team-stat{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-radius:7px;background:#13162088;margin-bottom:5px}
+.team-stat-lbl{font-size:11px;color:var(--text2)}
+.team-stat-val{font-size:12px;font-weight:600;color:var(--text)}
+
+/* QUOTE */
+.quote{background:#131620;border-left:3px solid var(--border);border-radius:0 6px 6px 0;padding:8px 12px;margin-bottom:7px;font-size:11px;color:var(--text2);line-height:1.6}
+.quote b{color:var(--text);font-weight:600}
+
+/* ALERT / GOOD */
+.alert-box{background:#131620;border-left:3px solid var(--coral);border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:10px;font-size:11.5px;color:var(--text2);line-height:1.6}
+.alert-box b{color:var(--text);font-weight:600}
+.good-box{background:#131620;border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:10px;font-size:11.5px;color:var(--text2);line-height:1.6}
+.good-box b{color:var(--text);font-weight:600}
+.info-box{background:#131620;border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:10px;font-size:11.5px;color:var(--text2);line-height:1.6}
+.info-box b{color:var(--text);font-weight:600}
+
+/* CONF METER */
+.conf-meter{display:flex;align-items:center;gap:12px}
+.conf-circle{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Unbounded',sans-serif;font-size:16px;font-weight:900;flex-shrink:0}
+.conf-bars{flex:1}
+.conf-bar-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:10px}
+.conf-bar-lbl{color:var(--text3);width:60px}
+.conf-bar-t{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.conf-bar-f{height:100%;border-radius:3px}
+
+/* TOOLS CHIP */
+.tools-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.tool-chip{display:flex;align-items:center;gap:4px;background:#13162088;border:1px solid var(--border);border-radius:20px;padding:3px 9px;font-size:10px;color:var(--text2)}
+.tool-dot{width:6px;height:6px;border-radius:50%}
+
+/* AMBASSADOR */
+.amb-box{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.amb-chip{background:var(--purple-g);border:1px solid #7c3aed33;color:var(--purple-l);padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600}
+
+/* GLOBAL RANKING */
+.rank-item{display:grid;grid-template-columns:22px 1fr 90px 44px;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;transition:background .15s;cursor:pointer;margin-bottom:2px}
+.rank-item:hover{background:var(--card)}
+.rank-num{font-family:'Unbounded',sans-serif;font-size:9px;color:var(--text4);text-align:right}
+.rank-name{font-size:11.5px;color:var(--text);font-weight:500}
+.rank-track{height:8px;background:#131620;border-radius:4px;overflow:hidden;border:1px solid var(--border)}
+.rank-fill{height:100%;border-radius:3px}
+.rank-val{font-family:'Unbounded',sans-serif;font-size:10px;font-weight:700;text-align:right}
+
+/* CORR TABLE */
+.corr-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);font-size:11px}
+.corr-row:last-child{border-bottom:none}
+.corr-desc{color:var(--text2);flex:1}
+.corr-r{font-family:'Unbounded',sans-serif;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;min-width:54px;text-align:center}
+.r-sp{background:#E1F5EE;color:#0F6E56}.r-mp{background:#E6F1FB;color:#185FA5}.r-wp{background:#f1efee;color:#888780}.r-sn{background:#FAECE7;color:#993C1D}.r-mn{background:#FAEEDA;color:#854F0B}.r-n{background:#f1efee;color:#c8c7c0}
+.corr-sig{font-size:9px;color:var(--text4);min-width:28px;text-align:center}
+
+/* PILL TABS */
+.pill-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.pill{background:var(--border);color:var(--text3);font-size:10px;padding:4px 12px;border-radius:20px;cursor:pointer;transition:all .15s;border:1px solid transparent}
+.pill.active{background:var(--purple-g);color:var(--purple-l);border-color:#7c3aed44}
+.pill:hover:not(.active){background:var(--card);color:var(--text2)}
+
+/* OPEN ANSWERS */
+.open-answer{background:#131620;border:1px solid var(--border);border-radius:8px;padding:10px 13px;margin-bottom:6px;font-size:11px;color:var(--text2);line-height:1.6}
+.open-answer:hover{border-color:#7c3aed33}
+
+/* DELTA */
+.delta-pos{color:var(--green);font-size:9px;font-weight:600}
+.delta-neg{color:var(--coral);font-size:9px;font-weight:600}
+.delta-neu{color:var(--text4);font-size:9px}
+
+/* FOOTNOTE */
+.footnote{font-size:10px;color:var(--text4);margin-top:8px;padding-top:8px;border-top:1px solid var(--line);line-height:1.5}
+
+/* SCROLLABLE */
+.scroll-x{overflow-x:auto}
+
+/* TRANSITION */
+.pg{display:none;padding:28px 32px 60px;animation:fadeIn .25s ease}
+.pg.act{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* RESPONSIVE */
+@media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{position:relative;height:auto}.stats-4{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}.insight-row{grid-template-columns:1fr}}
+
+.nb{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:8px;cursor:pointer;font-size:11.5px;color:var(--text2);margin:1px 6px;background:none;border:1px solid transparent;width:calc(100% - 12px);text-align:left;font-family:inherit;transition:all .15s}
+.nb:hover{background:var(--card);color:var(--text)}
+.nb.act{background:#7c3aed18;color:var(--purple-l);border-color:#7c3aed33}
+.nd{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.nbadge{margin-left:auto;font-size:9px;background:var(--border);color:var(--text3);padding:1px 6px;border-radius:10px}
+.nb.act .nbadge{background:#7c3aed22;color:var(--purple-l)}
+</style>
+</head>
+<body>
+
+<div id="pw-screen" style="position:fixed;inset:0;background:#0f1117;display:flex;align-items:center;justify-content:center;z-index:9999">
+  <div style="background:#1a1d27;border:1px solid #252840;border-radius:16px;padding:40px 36px;width:320px;text-align:center">
+    <div style="font-size:28px;margin-bottom:12px">🤖</div>
+    <div style="font-family:'Unbounded',sans-serif;font-size:14px;font-weight:700;color:#f1f5f9;margin-bottom:6px">KMA — AI Adoption</div>
+    <div style="font-size:11px;color:#64748b;margin-bottom:24px">Введи пароль для доступу</div>
+    <input id="pw-input" type="password" placeholder="Пароль" onkeydown="if(event.key==='Enter')checkPw()" style="width:100%;background:#131620;border:1px solid #252840;border-radius:8px;padding:10px 14px;color:#f1f5f9;font-size:13px;outline:none;box-sizing:border-box;margin-bottom:10px">
+    <div id="pw-error" style="font-size:11px;color:#f43f5e;min-height:16px;margin-bottom:8px"></div>
+    <button onclick="checkPw()" style="width:100%;background:#7c3aed;border:none;border-radius:8px;padding:10px;color:#fff;font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.05em">УВІЙТИ</button>
+  </div>
+</div>
+
+<script>
+function checkPw() {
+  if (document.getElementById('pw-input').value === 'aikma') {
+    document.getElementById('pw-screen').style.display = 'none';
+  } else {
+    document.getElementById('pw-error').textContent = 'Невірний пароль';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+</script>
+<div class="layout">
+
+<nav class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">🤖</div>
+    <div class="logo-title">KMA — AI Adoption</div>
+    <div class="logo-sub">249 відповідей</div>
+  </div>
+  <div class="nav-section">Огляд</div>
+  <button onclick="SP('overview')" id="btn_overview" class="nb act"><span>📊</span> Загальна аналітика</button>
+  <button onclick="SP('correlations')" id="btn_correlations" class="nb"><span>🔗</span> Кореляції</button>
+  <div class="nav-section">Команди</div>
+  <button onclick="SP('t_martech')" id="btn_t_martech" class="nb"><div class="nd" style="background:#085041"></div><span>MarTech Department</span><span class="nbadge">n=6</span></button>
+<button onclick="SP('t_nml')" id="btn_t_nml" class="nb"><div class="nd" style="background:#085041"></div><span>Non Mobile Chapter</span><span class="nbadge">n=8</span></button>
+<button onclick="SP('t_gda')" id="btn_t_gda" class="nb"><div class="nd" style="background:#0F6E56"></div><span>General Data Analytics</span><span class="nbadge">n=7</span></button>
+<button onclick="SP('t_chillio')" id="btn_t_chillio" class="nb"><div class="nd" style="background:#0F6E56"></div><span>Chillio</span><span class="nbadge">n=19</span></button>
+<button onclick="SP('t_goats')" id="btn_t_goats" class="nb"><div class="nd" style="background:#1D9E75"></div><span>Goats Unit</span><span class="nbadge">n=26</span></button>
+<button onclick="SP('t_hyper')" id="btn_t_hyper" class="nb"><div class="nd" style="background:#1D9E75"></div><span>Hyper Unit</span><span class="nbadge">n=14</span></button>
+<button onclick="SP('t_botan')" id="btn_t_botan" class="nb"><div class="nd" style="background:#1D9E75"></div><span>Botan</span><span class="nbadge">n=7</span></button>
+<button onclick="SP('t_pava')" id="btn_t_pava" class="nb"><div class="nd" style="background:#378ADD"></div><span>Pava</span><span class="nbadge">n=7</span></button>
+<button onclick="SP('t_spurs')" id="btn_t_spurs" class="nb"><div class="nd" style="background:#378ADD"></div><span>Spurs Unit</span><span class="nbadge">n=23</span></button>
+<button onclick="SP('t_marketing')" id="btn_t_marketing" class="nb"><div class="nd" style="background:#378ADD"></div><span>Marketing (H,S,B)</span><span class="nbadge">n=10</span></button>
+<button onclick="SP('t_payment')" id="btn_t_payment" class="nb"><div class="nd" style="background:#378ADD"></div><span>Payment Dept</span><span class="nbadge">n=8</span></button>
+<button onclick="SP('t_capybaras')" id="btn_t_capybaras" class="nb"><div class="nd" style="background:#5F5E5A"></div><span>Capybaras Unit</span><span class="nbadge">n=19</span></button>
+<button onclick="SP('t_sb')" id="btn_t_sb" class="nb"><div class="nd" style="background:#5F5E5A"></div><span>S&amp;B Department</span><span class="nbadge">n=12</span></button>
+<button onclick="SP('t_falcons')" id="btn_t_falcons" class="nb"><div class="nd" style="background:#5F5E5A"></div><span>Falcons Unit</span><span class="nbadge">n=15</span></button>
+<button onclick="SP('t_recruitment')" id="btn_t_recruitment" class="nb"><div class="nd" style="background:#5F5E5A"></div><span>Recruitment Dept</span><span class="nbadge">n=10</span></button>
+<button onclick="SP('t_pr')" id="btn_t_pr" class="nb"><div class="nd" style="background:#5F5E5A"></div><span>PR Department</span><span class="nbadge">n=5</span></button>
+<button onclick="SP('t_oasis')" id="btn_t_oasis" class="nb"><div class="nd" style="background:#854F0B"></div><span>Oasis Tribe</span><span class="nbadge">n=22</span></button>
+<button onclick="SP('t_kivo')" id="btn_t_kivo" class="nb"><div class="nd" style="background:#854F0B"></div><span>Kivo Unit</span><span class="nbadge">n=7</span></button>
+<button onclick="SP('t_asa')" id="btn_t_asa" class="nb"><div class="nd" style="background:#993C1D"></div><span>ASA/ASO Team</span><span class="nbadge">n=8</span></button>
+<button onclick="SP('t_unicorns')" id="btn_t_unicorns" class="nb"><div class="nd" style="background:#993C1D"></div><span>Unicorns Unit</span><span class="nbadge">n=16</span></button>
+<button onclick="SP('t_operations')" id="btn_t_operations" class="nb"><div class="nd" style="background:#993C1D"></div><span>Operations Dept</span><span class="nbadge">n=9</span></button>
+<button onclick="SP('t_hr')" id="btn_t_hr" class="nb"><div class="nd" style="background:#993C1D"></div><span>HR Department</span><span class="nbadge">n=10</span></button>
+<button onclick="SP('t_compliance')" id="btn_t_compliance" class="nb"><div class="nd" style="background:#6d28d9"></div><span>Compliance Dept</span><span class="nbadge">n=5</span></button>
+<button onclick="SP('t_accounting')" id="btn_t_accounting" class="nb"><div class="nd" style="background:#6d28d9"></div><span>Accounting</span><span class="nbadge">n=3</span></button>
+<button onclick="SP('t_legal')" id="btn_t_legal" class="nb"><div class="nd" style="background:#991b1b"></div><span>Legal Department</span><span class="nbadge">n=4</span></button>
+
+  <div style="height:24px"></div>
+</nav>
+
+<main class="main">
+  <div id="overview" class="pg act">
+
+  <div class="page-header">
+    <div class="page-tag">AI ASSESSMENT · 2026</div>
+    <div class="page-title">AI в роботі — загальна аналітика</div>
+    <div class="page-sub">249 відповідей · 22 команди</div>
+  </div>
+
+  <div class="stats-row stats-4">
+    <div class="stat-card hi">
+      <div class="stat-lbl">Відповіли</div>
+      <div class="stat-val">249</div>
+      <div class="stat-sub">з 309 запрошених (81%)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">Середня впевненість</div>
+      <div class="stat-val">7.21</div>
+      <div class="stat-sub">медіана 7.0 · мода 7</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">Активні (щодня + регулярно)</div>
+      <div class="stat-val">87%</div>
+      <div class="stat-sub">217 з 249 відповідей</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">Готові ділитись (так + можливо)</div>
+      <div class="stat-val">37%</div>
+      <div class="stat-sub">85% налаштовані позитивно</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Як AI присутній у роботі</div>
+      <div class="bar-row">
+        <div class="bar-lbl">Частина процесу — регулярно</div>
+        <div class="bar-track"><div class="bar-fill" style="width:49%;background:var(--green)"></div></div>
+        <div class="bar-pct" style="color:var(--green)">49%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-lbl">Основний інструмент — щодня</div>
+        <div class="bar-track"><div class="bar-fill" style="width:38%;background:#059669"></div></div>
+        <div class="bar-pct" style="color:#34d399">38%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-lbl">Пробую — ще не системно</div>
+        <div class="bar-track"><div class="bar-fill" style="width:12%;background:#6ee7b7"></div></div>
+        <div class="bar-pct" style="color:#6ee7b7">12%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-lbl">Спостерігаю</div>
+        <div class="bar-track"><div class="bar-fill" style="width:1%;background:#d1fae5"></div></div>
+        <div class="bar-pct" style="color:var(--text4)">&lt;1%</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Рівень впевненості 1–10</div>
+      <div class="bar-row">
+        <div class="bar-lbl">Висока (8–10)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:46%;background:var(--blue)"></div></div>
+        <div class="bar-pct" style="color:var(--blue)">46%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-lbl">Середня (6–7)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:42%;background:#85B7EB"></div></div>
+        <div class="bar-pct" style="color:#85B7EB">42%</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-lbl">Низька (≤5)</div>
+        <div class="bar-track"><div class="bar-fill" style="width:12%;background:#B5D4F4"></div></div>
+        <div class="bar-pct" style="color:var(--text3)">12%</div>
+      </div>
+      <div class="footnote" style="margin-top:12px">Середня 7.21 · медіана 7.0 · skewness −0.65 (більшість у верхній частині шкали)</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Топ інструменти</div>
+      <div class="bar-row"><div class="bar-lbl">GPT</div><div class="bar-track"><div class="bar-fill" style="width:82%;background:#185FA5"></div></div><div class="bar-pct" style="color:#60a5fa">82%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Claude</div><div class="bar-track"><div class="bar-fill" style="width:75%;background:#378ADD"></div></div><div class="bar-pct" style="color:#93c5fd">75%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Gemini</div><div class="bar-track"><div class="bar-fill" style="width:54%;background:#85B7EB"></div></div><div class="bar-pct" style="color:#bfdbfe">54%</div></div>
+      <div class="bar-row"><div class="bar-lbl">KissMyChat</div><div class="bar-track"><div class="bar-fill" style="width:36%;background:#5b21b6"></div></div><div class="bar-pct" style="color:var(--purple-l)">36%</div></div>
+      <div class="footnote" style="margin-top:8px">Середнє 2.61 інструменти на людину · 57% використовують 3+</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Що заважає більше (топ бар'єри)</div>
+      <div class="bar-row"><div class="bar-lbl">Нічого не заважає</div><div class="bar-track"><div class="bar-fill" style="width:43%;background:var(--green)"></div></div><div class="bar-pct" style="color:var(--green)">43%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Немає часу</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:var(--coral)"></div></div><div class="bar-pct" style="color:var(--coral)">25%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Безпека / конфіденційність</div><div class="bar-track"><div class="bar-fill" style="width:24%;background:#f97316"></div></div><div class="bar-pct" style="color:#fb923c">24%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Ненадійні результати</div><div class="bar-track"><div class="bar-fill" style="width:22%;background:#f59e0b"></div></div><div class="bar-pct" style="color:var(--amber)">22%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Немає корп. доступу</div><div class="bar-track"><div class="bar-fill" style="width:16%;background:#fcd34d"></div></div><div class="bar-pct" style="color:#fde68a">16%</div></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Яка підтримка потрібна</div>
+      <div class="bar-row"><div class="bar-lbl">Більше часу на досліди</div><div class="bar-track"><div class="bar-fill" style="width:57%;background:var(--purple)"></div></div><div class="bar-pct" style="color:var(--purple-l)">57%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Практичні приклади</div><div class="bar-track"><div class="bar-fill" style="width:44%;background:#6d28d9"></div></div><div class="bar-pct" style="color:var(--purple-l)">44%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Структурований курс</div><div class="bar-track"><div class="bar-fill" style="width:38%;background:#5b21b6"></div></div><div class="bar-pct" style="color:#c4b5fd">38%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Корп. доступ до інструментів</div><div class="bar-track"><div class="bar-fill" style="width:33%;background:#4c1d95"></div></div><div class="bar-pct" style="color:#c4b5fd">33%</div></div>
+      <div class="bar-row"><div class="bar-lbl">Живе ком'юніті</div><div class="bar-track"><div class="bar-fill" style="width:27%;background:#3b0764"></div></div><div class="bar-pct" style="color:#a78bfa">27%</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Потенціал автоматизації (власна оцінка)</div>
+      <div class="bar-row"><div class="bar-lbl">20–40%</div><div class="bar-track"><div class="bar-fill" style="width:49%;background:var(--blue)"></div></div><div class="bar-pct" style="color:var(--blue)">49%</div></div>
+      <div class="bar-row"><div class="bar-lbl">до 20%</div><div class="bar-track"><div class="bar-fill" style="width:26%;background:#85B7EB"></div></div><div class="bar-pct" style="color:#93c5fd">26%</div></div>
+      <div class="bar-row"><div class="bar-lbl">40–80%</div><div class="bar-track"><div class="bar-fill" style="width:18%;background:#3b82f6"></div></div><div class="bar-pct" style="color:#bfdbfe">18%</div></div>
+      <div class="bar-row"><div class="bar-lbl">80%+</div><div class="bar-track"><div class="bar-fill" style="width:5%;background:#1d4ed8"></div></div><div class="bar-pct" style="color:#93c5fd">5%</div></div>
+      <div class="footnote" style="margin-top:8px">Середня оцінка: 32.3% · 23% вважають 40%+ автоматизується</div>
+    </div>
+  </div>
+
+  <div class="sec"><div class="sec-txt">Ключові інсайти</div></div>
+  <div class="insight-row">
+    <div class="insight-card ic-green">
+      <div class="ic-num">#1</div>
+      <div class="ic-big">87%</div>
+      <div class="ic-title">Активних без корпоративного примусу</div>
+      <div class="ic-text">100% самонавчання. Лише <b>11%</b> мали корпоративне навчання. Компанія не є джерелом AI-знань.</div>
+    </div>
+    <div class="insight-card ic-blue">
+      <div class="ic-num">#2</div>
+      <div class="ic-big">GPT≈Claude</div>
+      <div class="ic-title">Два стандарти без корпоративного рішення</div>
+      <div class="ic-text"><b>82%</b> GPT, <b>75%</b> Claude. Різниця 7пп. Люди платять самостійно або використовують безкоштовні ліміти.</div>
+    </div>
+    <div class="insight-card ic-amber">
+      <div class="ic-num">#3</div>
+      <div class="ic-big">r=0.56</div>
+      <div class="ic-title">Практика → впевненість (найсильніша кореляція)</div>
+      <div class="ic-text">Щоденні: впевненість <b>8.1</b>. Ті що пробують: <b>5.7</b>. Практика пояснює 31% варіації впевненості.</div>
+    </div>
+    <div class="insight-card ic-coral">
+      <div class="ic-num">#4</div>
+      <div class="ic-big">2.8б</div>
+      <div class="ic-title">Розкид між командами (9.0 vs 3.0)</div>
+      <div class="ic-text">MarTech <b>9.0</b>, Legal <b>3.0</b>. Пояснення — норма команди і лідерська поведінка, а не роль чи стаж.</div>
+    </div>
+  </div>
+  <div class="insight-row">
+    <div class="insight-card ic-purple">
+      <div class="ic-num">#5</div>
+      <div class="ic-big">85%</div>
+      <div class="ic-title">Налаштовані ділитись зараз або в майбутньому</div>
+      <div class="ic-text">18% «залюбки», 19% «можливо», 48% «хочу підтягнутись». <b>70 нікнеймів</b> — реальна база ком'юніті.</div>
+    </div>
+    <div class="insight-card ic-green">
+      <div class="ic-num">#6</div>
+      <div class="ic-big">r=0.04</div>
+      <div class="ic-title">Стаж не впливає на AI-впевненість</div>
+      <div class="ic-text">До 1 року: <b>7.16</b>. 1–5 років: <b>7.28</b>. Різниця 0.12 бала — статистично незначуща. AI-грамотність незалежна від досвіду.</div>
+    </div>
+  </div>
+
+</div>
+  <div id="correlations" class="pg">
+
+  <div class="page-header">
+    <div class="page-tag">ПРИХОВАНІ МОТИВИ · n=248</div>
+    <div class="page-title">Що насправді стоїть за відповідями</div>
+    <div class="page-sub">12 суперечностей між поведінкою і словами · на основі кореляційного аналізу сирих даних · верифікуй через глибинні інтерв'ю</div>
+  </div>
+
+  <div class="info-box" style="margin-bottom:20px">Жоден з цих мотивів не зафіксований прямо в анкеті. Це інтерпретація суперечностей між поведінкою і відповідями. Числа — реальні розрахунки на вибірці 248 осіб.</div>
+
+  <div class="sec"><div class="sec-txt">Страх і самозахист</div></div>
+
+  <div class="insight-row">
+    <div class="insight-card ic-coral">
+      <div class="ic-num">#1 · Страх замінення</div>
+      <div class="ic-title">«Якщо я покажу що AI це робить — мене скоротять»</div>
+      <div class="ic-text">5 осіб <b>(2%)</b> прямо кажуть «не бачу реальної користі» — але їхня впевненість <b>7.20</b> і всі вони регулярно використовують AI. Тобто користь бачать, але заперечують.</div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:10px;color:var(--text4)">🔎 Сигнал: Людина регулярно використовує AI, але вголос каже «не бачу користі». Поведінка і слова розходяться. Бар'єр «не бачу користі» r=−0.00 з впевненістю — він не пов'язаний із реальним незнанням.</div>
+    </div>
+    <div class="insight-card ic-coral">
+      <div class="ic-num">#2 · Страх помилитись публічно</div>
+      <div class="ic-title">«Поділюсь — і виявиться що я все робив неправильно»</div>
+      <div class="ic-text"><b>20 осіб (8%)</b> мають впевненість 7+ але категорично відмовляються ділитись. Середній бал — <b>8.05</b>. Це не брак знань. Це страх оцінки з боку колег або відчуття що «мій метод недостатньо правильний».</div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:10px;color:var(--text4)">🔎 Сигнал: Впевнений у собі, але «ні» на ділитись. Класична соціальна тривога. Готовність ділитись r=+0.35 з впевненістю — зв'язок є, але 8% його ламають.</div>
+    </div>
+  </div>
+
+  <div class="insight-row">
+    <div class="insight-card ic-amber">
+      <div class="ic-num">#3 · Страх відповідальності</div>
+      <div class="ic-title">«Якщо AI помилиться — це буде моя помилка»</div>
+      <div class="ic-text"><b>22%</b> вказують «ненадійні результати». Але ті хто щодня використовує AI — теж стикаються з галюцинаціями і не зупиняються. Страх не в якості виводу, а у відповідальності за рішення на основі AI.</div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:10px;color:var(--text4)">🔎 Сигнал: Legal (3.0), Accounting (4.33) — найнижча впевненість там де ціна помилки висока. «Ненадійні результати» r=−0.10, p=0.108 — слабкий ефект.</div>
+    </div>
+    <div class="insight-card ic-amber">
+      <div class="ic-num">#4 · Страх порушити правила яких немає</div>
+      <div class="ic-title">«Краще не буду — раптом це не дозволено»</div>
+      <div class="ic-text"><b>24%</b> гальмують через «питання безпеки». Але корпоративної AI-політики немає — ці люди самі придумали заборони. Вакуум правил читається як «краще не ризикувати».</div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:10px;color:var(--text4)">🔎 Сигнал: Бар'єр безпеки r=−0.22 (***). З ним: впевненість 6.59, без: 7.41. Не корелює з реальними обмеженнями — лише з відсутністю дозволу.</div>
+    </div>
+  </div>
+
+  <div class="sec"><div class="sec-txt">Ідентичність і статус</div></div>
+
+  <div class="insight-row">
+    <div class="insight-card ic-purple">
+      <div class="ic-num">#5 · Загроза експертній ідентичності</div>
+      <div class="ic-title">«Я експерт у своїй справі. AI знецінює мій досвід»</div>
+      <div class="ic-text"><b>4 особи</b> з впевненістю <b>8.25</b> — щоденні користувачі — вважають що «нічого не можна автоматизувати». Це не незнання. Це захист: якщо визнати потенціал автоматизації — треба переосмислити цінність своєї роботи.</div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:10px;color:var(--text4)">🔎 Сигнал: Найвища впевненість + найнижча оцінка автоматизації. Авто-оцінка r=+0.17 з впевненістю (**) — але ця мікрогрупа інвертує тренд.</div>
+    </div>
+    <div class="insight-card ic-purple">
+      <div class="ic-num">#6 · «Я і без AI справляюсь»</div>
+      <div class="ic-title">Самодостатність як захисна позиція</div>
+      <div class="ic-text"><b>37%</b> з групи «Ні» кажуть «нічого не заважає» — але відмовляються ділитись. Впевненість цієї групи — <b>6.40</b>. Дивне поєднання: «все ок, але ні». Не «нема потреби», а «не хочу».</div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:10px;color:var(--text4)">🔎 Сигнал: Відсутність бар'єрів + відмова від участі. «Ні» ділитись — середня впевненість 6.40, тоді як «залюбки» — 8.05. Δ = 1.65 бала.</div>
+    </div>
+  </div>
+
+  <div class="insight-row">
+    <div class="insight-card ic-blue">
+      <div class="ic-num">#7 · Конкурентна перевага — не ділитись</div>
+      <div class="ic-title">«Якщо я навчу інших — вони мене наздоженуть»</div>
+      <div class="ic-text">Серед впевнених <b>(8+)</b> хто каже «ні» ділитись — <b>11%</b>. Для людини яка вже вклала час у AI-скіли, поширення знань означає втрату диференціації. Особливо там де оцінка відносна.</div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:10px;color:var(--text4)">🔎 Сигнал: Відмова ділитись при високій впевненості. Серед 8+ — 26% «залюбки», але 11% — «ні». Обидві групи з однаково високою впевненістю.</div>
+    </div>
+    <div class="insight-card ic-blue" style="visibility:hidden"></div>
+  </div>
+
+  <div class="sec"><div class="sec-txt">Комфорт і пасивний опір</div></div>
+
+  <div class="insight-row">
+    <div class="insight-card ic-green">
+      <div class="ic-num">#8 · Комфортна некомпетентність</div>
+      <div class="ic-title">«Я вже знаю як робити — навіщо перевчатись»</div>
+      <div class="ic-text"><b>34 особи (14%)</b> — регулярно використовують AI, але впевненість <b>≤6</b>. Бар'єри: «не знаю з чого почати» (<b>35%</b>) і «немає часу» (<b>44%</b>). Застрягли в одному сценарії. Комфортна некомпетентність.</div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:10px;color:var(--text4)">🔎 Сигнал: Активний але не зростаючий. «Не знаю з чого почати» r=−0.42 (***) — найсильніший негативний предиктор. Δ впевненості = −2.04 бала.</div>
+    </div>
+    <div class="insight-card ic-green">
+      <div class="ic-num">#9 · Псевдозалученість</div>
+      <div class="ic-title">«Нічого не заважає» — але список запитів є</div>
+      <div class="ic-text"><b>65 з 106 осіб (61%)</b> що сказали «нічого не заважає» — одночасно просять більше часу, курс, приклади або доступ. Суперечність: якщо нічого не заважає — навіщо підтримка? Соціально бажана відповідь.</div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:10px;color:var(--text4)">🔎 Сигнал: «Нічого не заважає» r=+0.36 (***) — сильний позитивний зв'язок з впевненістю. Але 61% цієї групи одночасно мають запити — значить «нічого не заважає» ≠ «все добре».</div>
+    </div>
+  </div>
+
+  <div class="insight-row">
+    <div class="insight-card ic-amber">
+      <div class="ic-num">#10 · Відкладений намір</div>
+      <div class="ic-title">«Хочу підтягнутись — але нічого конкретного не роблю»</div>
+      <div class="ic-text"><b>14 осіб</b> — «хочу підтягнутись і потім ділитись», але не просять ні часу, ні курсу, ні прикладів. Впевненість <b>7.57</b>. Бажання без плану. Класичне прокрастинаційне формулювання: «колись, коли буде час».</div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:10px;color:var(--text4)">🔎 Сигнал: Намір без конкретного запиту — найімовірніше залишиться наміром. «Хочу підтягнутись» — найбільша група (46%), але без конкретного плану більшість не зрушить.</div>
+    </div>
+    <div class="insight-card ic-amber" style="visibility:hidden"></div>
+  </div>
+
+  <div class="sec"><div class="sec-txt">Соціальні і організаційні динаміки</div></div>
+
+  <div class="insight-row">
+    <div class="insight-card ic-coral">
+      <div class="ic-num">#11 · Командна норма</div>
+      <div class="ic-title">«Мій менеджер не використовує — навіщо мені»</div>
+      <div class="ic-text">Розкид <b>2.8 балів</b> між командами (від 3.0 до 9.0) не пояснюється стажем (r=−0.04, p=0.586) чи роллю. Найімовірніша причина — норма команди. Якщо лідер не використовує AI — підлеглі отримують сигнал «тут це не треба».</div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:10px;color:var(--text4)">🔎 Сигнал: HR, Operations, Legal — низькі бали там де лідерство не задає AI-норму. Стаж r=−0.04, n.s. — фактор не в досвіді, а в культурі команди.</div>
+    </div>
+    <div class="insight-card ic-purple">
+      <div class="ic-num">#12 · Синдром «роблю неправильно»</div>
+      <div class="ic-title">Курс потрібен не щоб навчити, а щоб легітимізувати</div>
+      <div class="ic-text"><b>70 активних</b> (щодня+регулярно) просять структурований курс. Впевненість — <b>6.89</b>, нижча за середню. Вони використовують AI, але відчувають що роблять це «неправильно». Це не брак практики — брак легітимації.</div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--line);font-size:10px;color:var(--text4)">🔎 Сигнал: Запит на курс r=−0.39 (***). Серед невпевнених (≤5) — 70% хочуть курс. Курс потрібен щоб сказати «те що ти вже робиш — правильно».</div>
+    </div>
+  </div>
+
+  <div class="sec"><div class="sec-txt">Підсумкова карта прихованих мотивів</div></div>
+  <div class="grid3" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-title" style="color:var(--coral)">🛡 Страх (захисний)</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.9">
+        · Замінення (#1)<br>
+        · Публічна оцінка (#2)<br>
+        · Відповідальність за помилку AI (#3)<br>
+        · Порушити неіснуючі правила (#4)
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--purple-l)">👤 Ідентичність</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.9">
+        · Захист експертного статусу (#5)<br>
+        · «Я і так справляюсь» (#6)<br>
+        · Конкурентна перевага (#7)
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--amber)">😶 Пасивний опір</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.9">
+        · Комфортна некомпетентність (#8)<br>
+        · Псевдозалученість (#9)<br>
+        · Відкладений намір (#10)<br>
+        · Командна норма «не треба» (#11)<br>
+        · Синдром «роблю неправильно» (#12)
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+  <div id="t_martech" class="pg"></div>
+<div id="t_nml" class="pg"></div>
+<div id="t_gda" class="pg"></div>
+<div id="t_chillio" class="pg"></div>
+<div id="t_goats" class="pg"></div>
+<div id="t_hyper" class="pg"></div>
+<div id="t_botan" class="pg"></div>
+<div id="t_pava" class="pg"></div>
+<div id="t_spurs" class="pg"></div>
+<div id="t_marketing" class="pg"></div>
+<div id="t_payment" class="pg"></div>
+<div id="t_capybaras" class="pg"></div>
+<div id="t_sb" class="pg"></div>
+<div id="t_falcons" class="pg"></div>
+<div id="t_recruitment" class="pg"></div>
+<div id="t_pr" class="pg"></div>
+<div id="t_oasis" class="pg"></div>
+<div id="t_kivo" class="pg"></div>
+<div id="t_asa" class="pg"></div>
+<div id="t_unicorns" class="pg"></div>
+<div id="t_operations" class="pg"></div>
+<div id="t_hr" class="pg"></div>
+<div id="t_compliance" class="pg"></div>
+<div id="t_accounting" class="pg"></div>
+<div id="t_legal" class="pg"></div>
+
+</main>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+var GLOBAL_CONF = 7.21;
+var GLOBAL = {conf:7.21,n:249,active_pct:87,barrier_time:25,barrier_security:24,barrier_unreliable:22,barrier_start:12,barrier_access:16};
+
+const TEAMS = [
+  {id:'t_martech',name:'MarTech Department',n:6,conf:9.0,hi:67,mid:0,lo:0,daily:4,regular:0,trying:0,active:67,auto_mean:45,yes_share:1,maybe_share:1,want_grow:1,no_share:1,tools:{Claude:4,Gemini:4,GPT:3,KissMyChat:2},barriers:{'Нічого не заважає':3,'Немає часу':1},support:{'Нічого не бракує':2,'Живе ком\u2019юніті':2,'Більше часу':2,'Чіткі правила':1},helpers:{'Самостійні досліди':4,'YouTube/статті':2,'Поради колег':2},tasks:['Аналіз, ресерч, написання коду, обговорення ідей','Написання коду, планування, написання задач, аналіз зовнішніх сервісів','Відповіді на листи, аналіз документів, написання коду','Написання коду, асистент в плануванні, генерація документації, аналіз предметних областей'],fails:['На початку були кейси з низькою якістю. Зараз набагато краще','Довге планування з Codex — переускладнював рішення'],wishes:['Нема','---','---'],nicks:['Cthulhu','@Escaril'],insights:['Найвища впевненість у компанії (9.0)','50% без жодного бар\'єру']},
+  {id:'t_nml',name:'Non Mobile Chapter',n:8,conf:8.38,hi:88,mid:0,lo:12,daily:8,regular:0,trying:0,active:100,auto_mean:59,yes_share:0,maybe_share:1,want_grow:3,no_share:2,tools:{Claude:8,GPT:6,KissMyChat:5,Gemini:5},barriers:{'Нічого не заважає':5,'Результати ненадійні':2,'Безпека':1},support:{'Нічого не бракує':4,'Практичні приклади':1,'Більше часу':1},helpers:{'Самостійні досліди':8,'YouTube/статті':6,'Поради колег':4},tasks:['Написання коду, виконання монотонних задач','Написання коду і все що пов\'язано — 90% часу з кодом','Написання документації, написання коду, планування розробки, дизайн архітектури','Автоматизація volta і terraform'],fails:['when llm could not count r in strawberry','Claude прожорливий на токени, Codex краще','Прям невдачних не було'],wishes:['Немає — якщо виникає задача, завжди знаходжу підхід','Швидке отримання доступів до сервісів при розробці'],nicks:['Xesht'],insights:['100% щоденних користувачів','88% з впевненістю 8+','Найвища оцінка автоматизації (59%)']},
+  {id:'t_gda',name:'General Data Analytics',n:7,conf:8.0,hi:71,mid:29,lo:0,daily:1,regular:6,trying:0,active:100,auto_mean:21,yes_share:1,maybe_share:1,want_grow:4,no_share:1,tools:{GPT:5,Claude:4,Gemini:3,KissMyChat:2},barriers:{'Результати ненадійні':3,'Немає часу':2,'Безпека':2,'Нічого не заважає':2},support:{'Корп. доступ':5,'Практичні приклади':4,'Структурований курс':3},helpers:{'Самостійні досліди':7,'Поради колег':4,'YouTube/статті':4},tasks:['Нагадує методи, дебагінг, пояснення нових бібліотек','Перевірка якості даних','Аналіз скриптів, запити в БД','Створення алертів, зміни в пайплайні даних, робота з SQL'],fails:['ШІ пропонував методи що не існують','Постійно треба перевіряти скрипти','KissMyChat розчаровує — не запрацював адекватно'],wishes:['Бот для каналу kma_analytics для автовідповідей','Аналіз нової апки — зупиняє безпека доступів до платіжних даних'],nicks:['kvimli','quanty'],insights:['100% активних','71% з впевненістю 8+','Корп. доступ — запит #1 (71%)']},
+  {id:'t_chillio',name:'Chillio',n:19,conf:7.87,hi:42,mid:32,lo:5,daily:10,regular:5,trying:0,active:79,auto_mean:37,yes_share:7,maybe_share:3,want_grow:5,no_share:0,tools:{Claude:15,GPT:14,Gemini:8},barriers:{'Нічого не заважає':12,'Немає часу':4,'Безпека':2},support:{'Більше часу':10,'Практичні приклади':8,'Нічого не бракує':5},helpers:{'Самостійні досліди':13,'YouTube/статті':10,'Поради колег':9},tasks:['Рісьорчі, написання ТЗ, доки для оптимізації','Аналітика, написання текстів, аналіз розмов','Звіти, фідбеки, нотатки, аналіз, ресорч, код, брейншторми','Створення візуального контенту, відео, анімації'],fails:['Важко засетапити агенти — незрозуміло з чого почати','Коли закінчуються токени','Тексти виходять занадто AIшними'],wishes:['Аналіз проведених зустрічей','AI User Acquisition Manager — мрія','Автоматизація запуску/зупинки a/b тестів'],nicks:['ollevche','yorgen','@Lukianivska','@silanah','Faramir','Glitch'],insights:['63% без жодного бар\'єру (норма 43%)','37% готові ділитись «залюбки» — найвищий показник','0% відмовились ділитись']},
+  {id:'t_goats',name:'Goats Unit',n:26,conf:7.85,hi:46,mid:23,lo:8,daily:11,regular:8,trying:1,active:73,auto_mean:35,yes_share:3,maybe_share:3,want_grow:10,no_share:3,tools:{Claude:16,GPT:16,Gemini:11,KissMyChat:10},barriers:{'Нічого не заважає':12,'Безпека':5,'Немає часу':2},support:{'Більше часу':9,'Практичні приклади':7,'Структурований курс':7},helpers:{'Самостійні досліди':19,'YouTube/статті':14,'Поради колег':10},tasks:['Технічні специфікації, задачі на найм','Написання коду, дебагінг, архітектура','Аналіз даних, аналітика, моніторинги','Дизайн в Figma, підбір компонентів, генерація placeholder'],fails:['При написанні таску/звіту — забагато «води»','Обмеження токенів при автоматизації дизайну','Парсер креативів конкурентів — не вдалось до кінця'],wishes:['Агент для тестової документації в ClickUp','Система сповіщень про аномалії в метриках','Аналіз даних в рекламних кабінетах'],nicks:['Behelit','flomaster','Shputya','ansia','Makima'],insights:['Впевненість 7.85 — вище загальної','46% з впевненістю 8+','Безпека — бар\'єр #1 (19%)']},
+  {id:'t_hyper',name:'Hyper Unit',n:14,conf:7.73,hi:57,mid:14,lo:7,daily:6,regular:4,trying:1,active:71,auto_mean:40,yes_share:2,maybe_share:4,want_grow:4,no_share:0,tools:{Claude:10,GPT:7,KissMyChat:7,Gemini:4},barriers:{'Нічого не заважає':6,'Немає часу':4,'Результати ненадійні':2},support:{'Більше часу':8,'Живе ком\'юніті':4,'Практичні приклади':3},helpers:{'Самостійні досліди':10,'YouTube/статті':5,'Поради колег':4},tasks:['Ведення власного Notion, ресьорч конкурентів, аналіз Amplitude','Написання автотестів для пришвидшення роботи','Описи задач на розробку, аналіз AB тестів','Робота з JSON для монетизаційних флоу'],fails:['ШІ погано знаходить баги в коді — вирішується детальним логуванням','Рісьорчі завжди треба перевіряти, Amplitude — треба навчати','При роботі з JSON — потрібно багато контексту'],wishes:['Автоматизувати маркет ресерч — моніторинг флоу конкурентів','Автоматизація задач через KissMyChat — погано працювало','Автоматизація написання тасок'],nicks:['@Beggins','marlin','basque','Teryk','@lusenko'],insights:['57% з впевненістю 8+','0% відмовились ділитись','Оцінка автоматизації 40% — вище норми']},
+  {id:'t_botan',name:'Botan',n:7,conf:7.71,hi:57,mid:43,lo:0,daily:4,regular:3,trying:0,active:100,auto_mean:32,yes_share:2,maybe_share:1,want_grow:2,no_share:1,tools:{Claude:5,Gemini:5,GPT:5,KissMyChat:1},barriers:{'Нічого не заважає':5,'Свій варіант':2},support:{'Нічого не бракує':2,'Практичні приклади':2,'Більше часу':1},helpers:{'Самостійні досліди':6,'Поради колег':5,'YouTube/статті':4},tasks:['Написання/рефакторинг/дебаг коду, написання документації','Структурування гіпотез, AB тести, документація, вайбкодинг','Написав скрейпер для пошуку фотографій рослин через веб','Ресьорч ринку, структурування інформації'],fails:['Перша ітерація завжди виходить не те що потрібно','Галюцинації і швидке зжирання токенів при вайбкодингу','Контексти декількох чатів перетинались'],wishes:['Дизайн-система для існуючого продукту без перепилювання коду','Реліз-планування з написанням задач прямо в ClickUp','Ресьорч органічного контенту для нових концептів креативів'],nicks:['Gudzyk','Peonika'],insights:['100% активних','71% без бар\'єрів (норма 43%)','57% з впевненістю 8+']},
+  {id:'t_pava',name:'Pava',n:7,conf:7.6,hi:29,mid:43,lo:0,daily:1,regular:4,trying:0,active:71,auto_mean:20,yes_share:0,maybe_share:0,want_grow:3,no_share:1,tools:{GPT:5,KissMyChat:3,Gemini:2,Claude:2},barriers:{'Не розумію як застосувати':2,'Немає часу':2,'Немає доступу':1},support:{'Більше часу':3,'Корп. доступ':2,'Практичні приклади':2},helpers:{'YouTube/статті':4,'Самостійні досліди':4,'Поради колег':2},tasks:['Написання ТЗ, генерація ідей','Написання коду, створення документації','Відповіді на листи, формування звітів','Аналіз та підсумування документів, написання текстів'],fails:['Іноді придумує інформацію','Витратив більше часу ніж зекономив','Деякі процеси важко описати ШІ'],wishes:['Немає чіткого бачення яких процесів можна оптимізувати'],nicks:[],insights:['0% готові ділитись зараз — найнижчий показник','Оцінка автоматизації 20% — нижче норми']},
+  {id:'t_spurs',name:'Spurs Unit',n:23,conf:7.48,hi:48,mid:43,lo:9,daily:14,regular:5,trying:4,active:83,auto_mean:27,yes_share:3,maybe_share:6,want_grow:12,no_share:2,tools:{GPT:22,Claude:17,Gemini:9},barriers:{'Нічого не заважає':12,'Немає часу':7,'Результати ненадійні':5},support:{'Більше часу':17,'Практичні приклади':10,'Структурований курс':10},helpers:{'Самостійні досліди':23,'YouTube/статті':13,'Поради колег':11},tasks:['Аналіз невідомого коду, написання нового функціоналу','Автоматизація аналізу відгуків App Store/Play Market','Аналіз даних, ресьорчі, підготовка документів','Написання коду, рефакторинг, дебаг, аналіз'],fails:['Більшість інформації потрібно валідувати — часто неточні дані','GPT не зміг зчитати Excel з декількома вкладками — почав вигадувати','При аналізі великих дашбордів часто «придумує» відповіді'],wishes:['Підключення AI до ClickUp для автовиконання тасок','Форматування стратегії продукту відповідно до цілей компанії','Валідація даних в Tableau'],nicks:['@Kaneda','Oneil','Oniks','deltaRo','Dantup','aligator'],insights:['100% з Самостійним навчанням','74% хочуть більше часу (норма 57%)','Корп. доступ — запит для 30%']},
+  {id:'t_marketing',name:'Marketing (H, S, B)',n:10,conf:7.43,hi:40,mid:30,lo:0,daily:2,regular:5,trying:0,active:70,auto_mean:33,yes_share:4,maybe_share:0,want_grow:2,no_share:0,tools:{KissMyChat:5,Claude:5,GPT:5,Gemini:3},barriers:{'Немає часу':3,'Безпека':3,'Нічого не заважає':2,'Немає доступу':2},support:{'Практичні приклади':3,'Більше часу':3,'Корп. доступ':3},helpers:{'Самостійні досліди':7,'YouTube/статті':6,'Поради колег':4},tasks:['Аналіз перформансу рекламних кампаній, нові кампанії, ресьорч конкурентів','Написання промптів, звітів, документації, написання коду, генерація відео','Пошук та групування нової семантики, написання оголошень Google Ads','Практично всі робочі процеси — ТЗ, перевірка текстів, листи, аналіз'],fails:['Нерелевантна семантика по запиту — потрібне допрацювання','Створення агента в KissMyChat — дуже багато токенів і складне налаштування'],wishes:['Вичитка текстів як агент з підключеними джерелами','Аналітика та висновки на основі даних'],nicks:['Joey','yaplp (вже активно ділюсь та проводжу воркшопи)','Anasteisha','Jace','Polygloshka'],insights:['40% готові ділитись «залюбки» — вище норми (18%)','0% відмовились ділитись','Безпека + немає часу — подвійний бар\'єр']},
+  {id:'t_payment',name:'Payment Department',n:8,conf:7.4,hi:25,mid:38,lo:0,daily:0,regular:3,trying:2,active:38,auto_mean:28,yes_share:0,maybe_share:1,want_grow:3,no_share:1,tools:{GPT:4,KissMyChat:3,Gemini:3,Claude:2},barriers:{'Безпека':4,'Немає доступу':3,'Результати ненадійні':2,'Не бачу користі':2},support:{'Практичні приклади':3,'Живе ком\'юніті':3,'Корп. доступ':2,'Чіткі правила':2},helpers:{'Самостійні досліди':4,'YouTube/статті':3,'Поради колег':1},tasks:['Написання відповідей на листи, external-комунікація','Аналіз ріквестів і ріспонсів від провайдерів','Аналіз документів, побудова процесуальних дій','Написання коду — прискорилось, навантаження на архітектурні рішення'],fails:['AI дає неточні відповіді при складному контексті','Безпека і надійність — основні проблеми','Код не відповідає вимогам — але це частина процесу'],wishes:['Аналітика платіжних даних — проблема: брак історичних даних','Є ТЗ для команди розробки, але потрібні доступи'],nicks:['🙂'],insights:['Лише 38% активних (норма 87%)','Безпека — бар\'єр #1 (50%)','«Не бачу користі» — 25% (норма 2%)','Немає доступу — 38% (норма 16%)']},
+  {id:'t_capybaras',name:'Capybaras Unit',n:19,conf:7.38,hi:21,mid:47,lo:0,daily:1,regular:10,trying:2,active:58,auto_mean:21,yes_share:0,maybe_share:3,want_grow:8,no_share:2,tools:{Claude:12,GPT:12,Gemini:8,KissMyChat:5},barriers:{'Безпека':6,'Нічого не заважає':6,'Немає доступу':4,'Результати ненадійні':3},support:{'Корп. доступ':7,'Більше часу':7,'Структурований курс':5,'Чіткі правила':4},helpers:{'Самостійні досліди':11,'YouTube/статті':9,'Поради колег':8},tasks:['Аналіз логів, створення та структурування документації','Написання дефолтного коду, написання коду','Структурування даних ресьорчів, аудит Figma, швидкі прототипи','Планування робочого дня, збереження задач, генерація контенту'],fails:['ClickUp AI Bot — невдала спроба інтеграції','Майже завжди потрібно переробляти та допрацьовувати','Галюцинує при роботі з великими контекстами'],wishes:['Автоматизація оновлення документації після релізів','Робота з Notion та аналітикою через Claude','Навчитись чи можу надати доступ до ClickUp для AI'],nicks:['@Velox','@Dobryak'],insights:['Лише 58% активних (норма 87%)','Корп. доступ — запит #1 (37%)','0% готові ділитись «залюбки»']},
+  {id:'t_sb',name:'S&B Department',n:12,conf:7.2,hi:42,mid:33,lo:8,daily:3,regular:6,trying:1,active:75,auto_mean:23,yes_share:1,maybe_share:0,want_grow:5,no_share:4,tools:{GPT:10,Claude:5,Gemini:3},barriers:{'Нічого не заважає':6,'Безпека':2,'Результати ненадійні':1},support:{'Чіткі правила':4,'Корп. доступ':4,'Більше часу':4},helpers:{'Самостійні досліди':9,'Поради колег':4,'Корпоративне навчання':3},tasks:['Відповіді на тікети, аналіз документів, зведення інформації','Перефразування макросів для команди сапорту','Складання звітів, аналіз звернень, написання коду для категоризатора','Відповіді на відгуки та тікети користувачів'],fails:['Мінорні кейси «затупу» — не критично','GPT не розуміє що замінити в тексті при ротації привітань','Перечитувати потрібно кожну відповідь — GPT ліпить рос. слова'],wishes:['Наразі задач де не знаю як підступитись — немає','Надійність відповідей — основна потреба'],nicks:['@SovaSup'],insights:['33% відмовились ділитись (норма 15%)','Чіткі правила — запит #1','Оцінка автоматизації 23% — нижче норми']},
+  {id:'t_falcons',name:'Falcons Unit',n:15,conf:7.09,hi:33,mid:20,lo:20,daily:3,regular:5,trying:2,active:53,auto_mean:46,yes_share:3,maybe_share:0,want_grow:7,no_share:1,tools:{GPT:9,Claude:6,KissMyChat:6,Gemini:5},barriers:{'Немає часу':7,'Не розумію як застосувати':3,'Нічого не заважає':3,'Не знаю з чого почати':3},support:{'Більше часу':8,'Практичні приклади':7,'Структурований курс':6,'Корп. доступ':4},helpers:{'Самостійні досліди':10,'YouTube/статті':8,'Поради колег':6},tasks:['Написання коду, вивчення нових тем в програмуванні','Аналіз документів, самаризація, генерація варіантів','Рісьорчі, генерація та валідація гіпотез','Аналіз тасок, план реалізації, документація'],fails:['Галюцинації та час на налаштування — з часом рідшає','Технічний ресьорч — 90% чисел були вигадані ШІ','Оверінженірінг рішення, непотрібний код'],wishes:['Аналіз трендів по трафіку/продукту на основі Tableau/Amplitude','Рекурентний збір відгуків і моніторинг конкурентів','Автоматизація перевірки івентів'],nicks:['Makson','firefly','@Kojima'],insights:['Лише 53% активних (норма 87%)','«Немає часу» — 47% (норма 25%)','Найвища оцінка автоматизації (46%)']},
+  {id:'t_recruitment',name:'Recruitment Department',n:10,conf:7.0,hi:30,mid:30,lo:0,daily:0,regular:6,trying:0,active:60,auto_mean:27,yes_share:0,maybe_share:2,want_grow:4,no_share:0,tools:{KissMyChat:5,GPT:5,Claude:4,Gemini:4},barriers:{'Немає часу':3,'Безпека':2,'Результати ненадійні':1,'Не знаю з чого почати':1},support:{'Практичні приклади':5,'Більше часу':5,'Структурований курс':4},helpers:{'Самостійні досліди':5,'Поради колег':4,'YouTube/статті':4},tasks:['Написання фідбеків після інтро, листи, відмови','Саммарі після співбесід для наймаючих менеджерів','Опис вакансій, питання на інтерв\'ю, лист для холодного пошуку','Оптимізація шаблонів для комунікації з кандидатами, аналіз воронки'],fails:['Невдалі з LIТІ — AI працював з великою кількістю помилок','PeopleGPT для сорсингу — той самий список що в LinkedIn','Неточна аналітика по ЗП'],wishes:['Автовалідація кандидатів по LinkedIn','Автозаповнення при сорсингу','Автоматичні ріджекшени — поки не довіряю AI'],nicks:[],insights:['Лише 60% активних (норма 87%)','0% «залюбки» ділитись','0% щоденних користувачів']},
+  {id:'t_oasis',name:'Oasis Tribe',n:22,conf:6.84,hi:23,mid:55,lo:9,daily:5,regular:13,trying:1,active:82,auto_mean:30,yes_share:2,maybe_share:5,want_grow:11,no_share:1,tools:{GPT:15,Claude:14,Gemini:13},barriers:{'Нічого не заважає':6,'Результати ненадійні':5,'Не знаю з чого почати':4,'Не розумію як застосувати':4},support:{'Більше часу':13,'Структурований курс':11,'Практичні приклади':10,'Чіткі правила':8},helpers:{'Самостійні досліди':18,'Поради колег':11,'YouTube/статті':9},tasks:['Оновлення і підтримка документації','Аналіз звітів, ринків, конкурентів, брейншторм','Написання мейлів, аудит процесів, робота з кампаніями','Складання звітів, аналіз рекламних кампаній'],fails:['Генерація ідей — надто банальні','AI не бере до уваги важливі деталі без купи контексту','При предиктах по місяцям — AI перезаписував попередні правки'],wishes:['Хочу агентів під різні задачі — не вистачає часу','Агент для рекламних кампаній з аналізом','Автоматизація через MCP-сервер'],nicks:['MuseCatcher','Tatarin','Avril','MotionForce'],insights:['Впевненість 6.84 — нижче загальної','«Не знаю з чого почати» — 18% (норма 12%)','Структурований курс потрібен 50%']},
+  {id:'t_kivo',name:'Kivo Unit',n:7,conf:6.67,hi:43,mid:14,lo:29,daily:4,regular:0,trying:2,active:57,auto_mean:27,yes_share:2,maybe_share:2,want_grow:2,no_share:0,tools:{Claude:5,Gemini:5,GPT:5},barriers:{'Результати ненадійні':3,'Не знаю з чого почати':2,'Немає доступу':2},support:{'Більше часу':3,'Корп. доступ':3,'Практичні приклади':2},helpers:{'Самостійні досліди':6,'Поради колег':2,'YouTube/статті':2},tasks:['Ресьорчі, оформлення документів, поради','Плагіни для AE, написання промптів для генерацій','Відповіді на листи, пошук інформації, написання скриптів','Аналіз масиву даних, робота з текстом, написання коду'],fails:['Claude стер всю історію чату з важливим ресьорчом','ChatGPT часто видає неправдиву інформацію','Claude code почистив тестову базу даних — добре що не прод'],wishes:['Автоматизований повноцінний ресьорч і написання креативів','Агент для написання тасок в ClickUp на основі інформації'],nicks:['@valvefox'],insights:['Лише 57% активних (норма 87%)','29% з низькою впевненістю ≤5','«Результати ненадійні» — 43% (норма 22%)']},
+  {id:'t_asa',name:'ASA/ASO Team',n:8,conf:6.5,hi:12,mid:75,lo:12,daily:1,regular:4,trying:3,active:62,auto_mean:31,yes_share:1,maybe_share:2,want_grow:5,no_share:0,tools:{Gemini:6,GPT:6,KissMyChat:4,Claude:3},barriers:{'Результати ненадійні':5,'Не розумію як застосувати':4,'Безпека':2,'Немає доступу':2},support:{'Практичні приклади':6,'Структурований курс':4,'Більше часу':4,'Чіткі правила':4},helpers:{'YouTube/статті':6,'Самостійні досліди':6,'Поради колег':5},tasks:['Генерація текстових метаданних, оформлення гіпотез','Аналіз даних, формування гіпотез, підготовка описів','Локалізація текстів, парсинг, генерація рефів','Створення висновків ресьорчів AB тестів конкурентів'],fails:['AI не може нормально рахувати кількість символів в метаданних','Аналіз рекламних кампаній в Gemini — плутає спенди','AI при аналізі ніші — не вирішив проблему перегляду всіх елементів'],wishes:['Автоматизація метаданних включно з кросс-локалізаціями','Генерація гіпотез для тестів з урахуванням контексту минулих','Автоматичне скрінування конкурентів у Figma'],nicks:['Nikster'],insights:['«Результати ненадійні» — 62% (норма 22%)','«Не розумію як застосувати» — 50% (норма 14%)','75% у середній зоні (6–7 балів)']},
+  {id:'t_unicorns',name:'Unicorns Unit',n:16,conf:6.38,hi:31,mid:31,lo:19,daily:3,regular:6,trying:4,active:56,auto_mean:38,yes_share:3,maybe_share:1,want_grow:5,no_share:3,tools:{Claude:11,GPT:10,KissMyChat:5,Gemini:4},barriers:{'Нічого не заважає':5,'Немає часу':5,'Немає доступу':4,'Результати ненадійні':3},support:{'Практичні приклади':7,'Більше часу':6,'Корп. доступ':6},helpers:{'Самостійні досліди':11,'YouTube/статті':9,'Поради колег':3},tasks:['Створення баг репорту, звіти по поточних тасках','Генерація зображень, написання текстів, аналіз ресьорчів','Написання коду, ресерч, планування','Управління задачами, термінами, нормалізація транскрипцій Fireflies'],fails:['Витратила більше часу ніж зекономила — прийшлось переробляти','Безкорисні кейси — записую міти, але задачі простіше накидати самому','Ліміт токенів — блокує використання з певною періодичністю'],wishes:['Перевірка верстки за допомогою Figma та AI','Автоматизація PDP по співробітниках через інтеграцію Notion+Slack+Fireflies','Аналіз метрик продукту та причин коливань'],nicks:['Valentinos','Parallax'],insights:['Лише 56% активних (норма 87%)','19% з низькою впевненістю ≤5','«Немає доступу» — 25% (норма 16%)']},
+  {id:'t_operations',name:'Operations Department',n:9,conf:6.38,hi:22,mid:44,lo:22,daily:1,regular:7,trying:0,active:89,auto_mean:23,yes_share:1,maybe_share:1,want_grow:2,no_share:3,tools:{Claude:6,Gemini:5,GPT:5,KissMyChat:3},barriers:{'Безпека':4,'Немає часу':2,'Немає доступу':2,'Результати ненадійні':1},support:{'Більше часу':3,'Структурований курс':2,'Нічого не бракує':2,'Чіткі правила':2},helpers:{'Самостійні досліди':8,'YouTube/статті':2},tasks:['Створення ботів, написання статей, роадмапи, звіти, презентації','Вичитка статей, аналіз термзів, ознайомлення з темою','Написання політик, матриці, шаблони, опис процесів','Структурування та аналіз інформації'],fails:['AI видає хибні інструкції — кнопок немає насправді','При налаштуванні сервісів AI вигадує неіснуючий функціонал','Іноді повністю змінює висновки після одного запитання'],wishes:['Знаю як підступитись — не вистачає часу','Впевнена що є задачі — але зараз не можу назвати конкретно'],nicks:['Carioca'],insights:['«Безпека» — бар\'єр #1 (44%, норма 24%)','33% відмовились ділитись (норма 15%)','89% активних, але впевненість лише 6.38']},
+  {id:'t_hr',name:'HR Department',n:10,conf:6.22,hi:10,mid:60,lo:20,daily:2,regular:7,trying:0,active:90,auto_mean:33,yes_share:1,maybe_share:1,want_grow:3,no_share:4,tools:{Claude:9,Gemini:6,GPT:6,KissMyChat:4},barriers:{'Безпека':4,'Немає часу':3,'Нічого не заважає':3,'Результати ненадійні':2},support:{'Більше часу':6,'Структурований курс':4,'Живе ком\'юніті':3,'Практичні приклади':3},helpers:{'Самостійні досліди':8,'Поради колег':6,'YouTube/статті':3},tasks:['Обробка репортів, опитувальників, аналітика, аналіз екзіт-інтервью','Складання звітів, аналіз даних, створення текстів','Рісьорчі, систематизація інформації, презентації','AI бот для опрацювання запитів на компенсацію соц пакету'],fails:['Було багато розчарувань з GPT — якщо розуміти як працює, розчарувань немає','AI може допридумувати дані','Чат іноді некоректно зчитує дані і міксує з попередніми'],wishes:['Ботик-коуч для менеджерів з правильними питаннями (конфлікт, рейз, фідбек)','Автоматизація мануальної виплати ЗП','Перенесення даних з файлу в файл без мануального дублювання'],nicks:['Medeiia','Nyssa'],insights:['Найнижча впевненість серед команд з 10+ відповідями (6.22)','HR мав би бути драйвером — сам потребує підтримки','«Безпека» — бар\'єр #1 (40%)','40% відмовились ділитись']},
+  {id:'t_pr',name:'PR Department',n:5,conf:7.0,hi:40,mid:60,lo:0,daily:1,regular:4,trying:0,active:100,auto_mean:28,yes_share:1,maybe_share:1,want_grow:3,no_share:0,tools:{Claude:4,GPT:4,Gemini:4,KissMyChat:3},barriers:{'Немає часу':3,'Не знаю з чого почати':2,'Результати ненадійні':2},support:{'Структурований курс':4,'Більше часу':4,'Практичні приклади':4,'Живе ком\'юніті':3},helpers:{'Самостійні досліди':5,'Поради колег':2,'YouTube/статті':2},tasks:['Стратегії, драфти концептів, оцінка комунікаційних повідомлень','Написання копірайтів, пошук інформації, самері','Написання статей','Робота з текстами, челенджинг ідей, різні дослідження'],fails:['Генерація відповідей журналістам — забагато канцеляризмів навіть з правильним промптом','Відмовились від ChatGPT — забагато нерелевантних відповідей','KissMyChat — кастомні скіли для агента дуже складні'],wishes:['Дизайн-агент для моушн-відео брендових роликів','Автоматизація генерації зображень для соцмереж','Пошук актуальних контактів журналістів — AI видає неактуальні'],nicks:['Capsy','@Karaoke'],insights:['100% активних — всі використовують AI','«Немає часу» — 60% (норма 25%)','80% хочуть курс + приклади + час','0% відмовились ділитись']},
+  {id:'t_compliance',name:'Compliance Department',n:5,conf:6.0,hi:0,mid:40,lo:0,daily:0,regular:0,trying:2,active:0,auto_mean:60,yes_share:0,maybe_share:1,want_grow:0,no_share:0,tools:{GPT:2,Claude:1,Gemini:1},barriers:{'Безпека':1,'Немає доступу':1,'Нічого не заважає':1,'Не розумію як застосувати':1},support:{'Практичні приклади':1},helpers:{'Самостійні досліди':2},tasks:['---'],fails:['---'],wishes:['---'],nicks:[],insights:['0% активних (тільки пробують)','Мала вибірка — обережно з висновками']},
+  {id:'t_accounting',name:'Accounting & Reporting',n:3,conf:4.33,hi:0,mid:33,lo:67,daily:0,regular:1,trying:2,active:33,auto_mean:23,yes_share:0,maybe_share:0,want_grow:1,no_share:2,tools:{GPT:3,Gemini:2,Claude:1},barriers:{'Не знаю з чого почати':2,'Безпека':1,'Немає доступу':1},support:{'Структурований курс':3,'Корп. доступ':3,'Більше часу':1},helpers:{'Самостійні досліди':3,'Поради колег':2},tasks:['Складання структури звіту, конвертація даних, ресьорчі','Аналіз договорів на основні показники, робота з файлами'],fails:['Складні кейси з ІФРС — AI не знайшов правильної відповіді','При навігації в Zoho робить помилки і вказує неіснуючі дії'],wishes:['Масове видалення/оновлення даних в інвойсах Zoho'],nicks:[],insights:['67% з низькою впевненістю ≤5','Лише 33% активних','«Структурований курс» + «Корп. доступ» — топ запити (100%)','Мала вибірка — дані індикативні']},
+  {id:'t_legal',name:'Legal Department',n:4,conf:3.0,hi:0,mid:0,lo:50,daily:0,regular:0,trying:2,active:0,auto_mean:20,yes_share:0,maybe_share:0,want_grow:1,no_share:1,tools:{KissMyChat:1,Gemini:1,GPT:1},barriers:{'Безпека':2,'Не знаю з чого почати':1,'Результати ненадійні':1},support:{'Практичні приклади':2,'Структурований курс':1,'Чіткі правила':1,'Живе ком\'юніті':1},helpers:{'Самостійні досліди':1,'Нічого не допомагало':1},tasks:['Листи, ресьорчі на теми продуктового та платіжного комплаєнсу','Пре-чек креативів та Web/Web2App продуктів на дотримання полісі'],fails:['Часто придумує неіснуючі закони та статті — треба перевіряти першоджерела','Як у юриста — досить часто. Вигадані факти в ресьорчах'],wishes:['Пре-чек креативів на дотримання комплаєнсу з таблицею ризиків','---'],nicks:[],insights:['Найнижча впевненість (3.0)','50% з низькою впевненістю ≤5','0% активних','Безпека — головна причина стриманості']}
+];
+
+// FIX 1: Single navigation function — SP() is used everywhere
+function SP(id) {
+  document.querySelectorAll('.pg').forEach(function(p){ p.classList.remove('act'); });
+  document.querySelectorAll('.nb').forEach(function(b){ b.classList.remove('act'); });
+  var pg = document.getElementById(id);
+  if (pg) {
+    pg.classList.add('act');
+    if (id.indexOf('t_') === 0) buildTeamPage(id, pg);
+  }
+  var btn = document.getElementById('btn_' + id);
+  if (btn) btn.classList.add('act');
+  window.scrollTo(0,0);
+}
+
+function buildTeamPage(id, container) {
+  const team = TEAMS.find(t => t.id === id);
+  if (!team || container._built) return;
+
+  const confColor = team.conf >= 8.5 ? '#085041' : team.conf >= 7.5 ? '#0F6E56' : team.conf >= 7 ? '#185FA5' : team.conf >= 6 ? '#854F0B' : '#993C1D';
+  const activeVsNorm = team.active - GLOBAL.active_pct;
+  const confVsNorm = (team.conf - GLOBAL_CONF).toFixed(2);
+  const autoVsNorm = (team.auto_mean - 32.3).toFixed(1);
+
+  const toolsList = Object.entries(team.tools).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const barriersList = Object.entries(team.barriers).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const supportList = Object.entries(team.support).sort((a,b)=>b[1]-a[1]).slice(0,4);
+
+  const confRing = `<div class="conf-circle" style="width:56px;height:56px;background:${confColor}22;border:2px solid ${confColor};color:${confColor}">${team.conf}</div>`;
+
+  const tasksHtml = (team.tasks||[]).filter(t=>t&&t.trim()&&t!=='---'&&t!=='-'&&t!==' ').slice(0,5).map(t => `<div class="open-answer">${t}</div>`).join('');
+  const failsHtml = (team.fails||[]).filter(t=>t&&t.trim()&&t!=='---'&&t!=='-'&&t!==' ').slice(0,4).map(t => `<div class="open-answer">${t}</div>`).join('');
+  const wishesHtml = (team.wishes||[]).filter(t=>t&&t.trim()&&t!=='---'&&t!=='-'&&t!==' ').slice(0,4).map(t => `<div class="open-answer">${t}</div>`).join('');
+  const nicksHtml = team.nicks && team.nicks.length ? `<div class="amb-box">${team.nicks.filter(n=>n&&n.trim()&&n!=='-').map(n=>`<div class="amb-chip">${n}</div>`).join('')}</div>` : '<div style="font-size:11px;color:var(--text4)">Нікнеймів не залишено</div>';
+
+  const toolsBars = toolsList.map(([name,cnt]) => {
+    const pct = Math.round(cnt/team.n*100);
+    return `<div class="bar-row"><div class="bar-lbl">${name}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:var(--purple)"></div></div><div class="bar-pct" style="color:var(--purple-l)">${pct}%</div></div>`;
+  }).join('');
+
+  const barriersBars = barriersList.map(([name,cnt]) => {
+    const pct = Math.round(cnt/team.n*100);
+    const nl = name.toLowerCase();
+    const color = nl.includes('нічого') ? 'var(--green)' : nl.includes('часу') ? 'var(--coral)' : nl.includes('безпек') ? '#f97316' : 'var(--amber)';
+    return `<div class="bar-row"><div class="bar-lbl" style="font-size:10.5px">${name.length>35?name.slice(0,35)+'…':name}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div><div class="bar-pct" style="color:${color}">${pct}%</div></div>`;
+  }).join('');
+
+  const supportBars = supportList.map(([name,cnt]) => {
+    const pct = Math.round(cnt/team.n*100);
+    return `<div class="bar-row"><div class="bar-lbl" style="font-size:10.5px">${name.length>35?name.slice(0,35)+'…':name}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:var(--purple-dim)"></div></div><div class="bar-pct" style="color:var(--purple-l)">${pct}%</div></div>`;
+  }).join('');
+
+  const shareTotal = team.yes_share + team.maybe_share + team.want_grow + team.no_share;
+  const shareVis = shareTotal ? [
+    {lbl:'Так, залюбки', val:team.yes_share, color:'#0F6E56'},
+    {lbl:'Можливо', val:team.maybe_share, color:'#378ADD'},
+    {lbl:'Хочу підтягнутись', val:team.want_grow, color:'var(--purple)'},
+    {lbl:'Ні', val:team.no_share, color:'var(--text4)'},
+  ] : [];
+  const shareHtml = shareVis.map(s => {
+    const p = shareTotal ? Math.round(s.val/shareTotal*100) : 0;
+    return `<div class="bar-row"><div class="bar-lbl">${s.lbl}</div><div class="bar-track"><div class="bar-fill" style="width:${p}%;background:${s.color}"></div></div><div class="bar-pct" style="color:${s.color}">${p}%</div></div>`;
+  }).join('');
+
+  const warnBoxes = (team.insights||[]).map(i => {
+    const isGood = i.includes('вище') || i.includes('100%') || i.includes('0% відмовились');
+    return `<div class="${isGood?'good-box':'alert-box'}">${i}</div>`;
+  }).join('');
+
+  const sampNote = team.n < 6 ? `<div class="alert-box"><b>⚠ Мала вибірка (n=${team.n}).</b> Результати індикативні — верифікуй у прямих розмовах з командою.</div>` : '';
+
+  // FIX 4: set _built AFTER innerHTML assignment
+  container.innerHTML = `
+<div class="page-header">
+  <div class="page-tag">АНАЛІЗ КОМАНДИ</div>
+  <div class="page-title">${team.name}</div>
+  <div class="page-sub">${team.n} відповідей · дані по всій команді</div>
+</div>
+${sampNote}
+${warnBoxes}
+<div class="stats-row stats-4">
+  <div class="stat-card hi">
+    <div class="stat-lbl">Впевненість</div>
+    <div class="stat-val" style="color:${confColor}">${team.conf}</div>
+    <div class="stat-sub">Загальна: ${GLOBAL_CONF} · ${parseFloat(confVsNorm)>0?'↑ вище':'↓ нижче'} на ${Math.abs(confVsNorm)}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-lbl">Активні</div>
+    <div class="stat-val" style="color:${team.active>=80?'var(--green)':team.active>=60?'var(--amber)':'var(--coral)'}">${team.active}%</div>
+    <div class="stat-sub">Норма: 87% · ${activeVsNorm>=0?'↑':'↓'} ${Math.abs(activeVsNorm)}пп</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-lbl">Оцінка автоматизації</div>
+    <div class="stat-val" style="color:var(--blue)">${team.auto_mean}%</div>
+    <div class="stat-sub">Загальна: 32.3% · ${parseFloat(autoVsNorm)>=0?'↑ вище':'↓ нижче'}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-lbl">n відповідей</div>
+    <div class="stat-val">${team.n}</div>
+    <div class="stat-sub">${Math.round(team.n/249*100)}% від загальної вибірки</div>
+  </div>
+</div>
+<div class="grid2">
+  <div class="card">
+    <div class="card-title">Рівень впевненості</div>
+    <div style="margin-bottom:12px">${confRing}</div>
+    <div class="bar-row"><div class="bar-lbl">Висока (8–10)</div><div class="bar-track"><div class="bar-fill" style="width:${team.hi}%;background:var(--green)"></div></div><div class="bar-pct" style="color:var(--green)">${team.hi}%</div></div>
+    <div class="bar-row"><div class="bar-lbl">Середня (6–7)</div><div class="bar-track"><div class="bar-fill" style="width:${team.mid}%;background:var(--blue)"></div></div><div class="bar-pct" style="color:var(--blue)">${team.mid}%</div></div>
+    <div class="bar-row"><div class="bar-lbl">Низька (≤5)</div><div class="bar-track"><div class="bar-fill" style="width:${team.lo||0}%;background:var(--coral)"></div></div><div class="bar-pct" style="color:${(team.lo||0)>10?'var(--coral)':'var(--text4)'}">${team.lo||0}%</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Присутність AI у роботі</div>
+    <div class="bar-row"><div class="bar-lbl">Щодня (основний)</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(team.daily/team.n*100)}%;background:#059669"></div></div><div class="bar-pct" style="color:#34d399">${Math.round(team.daily/team.n*100)}%</div></div>
+    <div class="bar-row"><div class="bar-lbl">Регулярно (частина процесу)</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(team.regular/team.n*100)}%;background:var(--green)"></div></div><div class="bar-pct" style="color:var(--green)">${Math.round(team.regular/team.n*100)}%</div></div>
+    <div class="bar-row"><div class="bar-lbl">Пробую</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(team.trying/team.n*100)}%;background:#6ee7b7"></div></div><div class="bar-pct" style="color:#6ee7b7">${Math.round(team.trying/team.n*100)}%</div></div>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--line);font-size:11px;color:var(--text3)">Активні: <b style="color:${team.active>=80?'var(--green)':team.active>=60?'var(--amber)':'var(--coral)'}">${team.active}%</b> · Норма: 87%</div>
+  </div>
+</div>
+<div class="grid2">
+  <div class="card">
+    <div class="card-title">Інструменти (% від команди)</div>${toolsBars}
+  </div>
+  <div class="card">
+    <div class="card-title">Бар'єри</div>${barriersBars}
+  </div>
+</div>
+<div class="grid2">
+  <div class="card">
+    <div class="card-title">Яка підтримка потрібна</div>${supportBars}
+  </div>
+  <div class="card">
+    <div class="card-title">Готовність ділитись досвідом</div>
+    ${shareHtml}
+    <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--line)">
+      <div style="font-size:10.5px;color:var(--text3);margin-bottom:6px">Потенційні амбасадори (залишили нікнейм):</div>
+      ${nicksHtml}
+    </div>
+  </div>
+</div>
+<div class="sec"><div class="sec-txt">Що вже роблять з AI</div></div>
+${tasksHtml || '<div class="open-answer" style="color:var(--text4)">Відкритих відповідей не залишено</div>'}
+<div class="sec"><div class="sec-txt">Що не вдалось — реальні болі</div></div>
+${failsHtml || '<div class="open-answer" style="color:var(--text4)">Невдалих кейсів не описано</div>'}
+<div class="sec"><div class="sec-txt">Хочуть, але не знають як підступитись</div></div>
+${wishesHtml || '<div class="open-answer" style="color:var(--text4)">Такого досвіду не описано</div>'}
+`;
+  container._built = true; // FIX 4: mark built only after successful render
+}
+
+// FIX 3: Average line as second dataset — no plugin needed
+function initDeptChart() {
+  const ctx = document.getElementById('deptChart');
+  if (!ctx) return;
+
+  const sorted = [...TEAMS].filter(t=>t.n>=4).sort((a,b) => b.conf - a.conf);
+  const labels = sorted.map(t => t.name.length > 20 ? t.name.slice(0,18)+'…' : t.name);
+  const data = sorted.map(t => t.conf);
+  const colors = data.map(v => v >= 8.5 ? '#085041' : v >= 7.5 ? '#1D9E75' : v >= 7 ? '#378ADD' : v >= 6.5 ? '#f59e0b' : '#f43f5e');
+  const avgLine = sorted.map(() => GLOBAL_CONF);
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          type: 'bar',
+          data,
+          backgroundColor: colors,
+          borderRadius: 6,
+          borderSkipped: false,
+          order: 2,
+        },
+        {
+          type: 'line',
+          data: avgLine,
+          borderColor: '#7c3aed',
+          borderWidth: 1.5,
+          borderDash: [5, 4],
+          pointRadius: 0,
+          fill: false,
+          order: 1,
+          tooltip: { enabled: false },
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          filter: (item) => item.datasetIndex === 0,
+          callbacks: {
+            label: ctx => `Впевненість: ${ctx.raw}/10`
+          }
+        }
+      },
+      scales: {
+        y: {
+          min: 0, max: 10,
+          grid: { color: '#1e2235' },
+          ticks: { color: '#64748b', font: { size: 10 } },
+        },
+        x: {
+          grid: { display: false },
+          ticks: { color: '#94a3b8', font: { size: 9 }, maxRotation: 45 }
+        }
+      },
+      onClick: (e, elements) => {
+        if (elements.length && elements[0].datasetIndex === 0) {
+          SP(sorted[elements[0].index].id);
+        }
+      }
+    }
+  });
+}
+
+// FIX 2: buildRanking uses SP() directly — no dead nav() calls
+
+window.addEventListener('load', function() {
+  initDeptChart();
+});
+</script>
+</body>
+</html>
