@@ -240,6 +240,9 @@ function checkPw() {
   <div class="nav-section">Огляд</div>
   <button onclick="SP('overview')" id="btn_overview" class="nb act"><span>📊</span> Загальна аналітика</button>
   <button onclick="SP('correlations')" id="btn_correlations" class="nb"><span>🔗</span> Кореляції</button>
+  <button onclick="SP('ranking')" id="btn_ranking" class="nb"><span>🏆</span> Рейтинг команд</button>
+  <button onclick="SP('requests')" id="btn_requests" class="nb"><span>📋</span> Запит від команд</button>
+  <button onclick="SP('ambassadors')" id="btn_ambassadors" class="nb"><span>⚡</span> Амбасадори</button>
   <div class="nav-section">Команди</div>
   <button onclick="SP('t_martech')" id="btn_t_martech" class="nb"><div class="nd" style="background:#085041"></div><span>MarTech Department</span><span class="nbadge">n=6</span></button>
 <button onclick="SP('t_nml')" id="btn_t_nml" class="nb"><div class="nd" style="background:#085041"></div><span>Non Mobile Chapter</span><span class="nbadge">n=8</span></button>
@@ -601,6 +604,125 @@ function checkPw() {
 <div id="t_accounting" class="pg"></div>
 <div id="t_legal" class="pg"></div>
 
+
+<!-- RANKING PAGE -->
+<div id="ranking" class="pg">
+  <div class="page-header">
+    <div class="page-tag">РЕЙТИНГ КОМАНД</div>
+    <div class="page-title">Команди за впевненістю в AI</div>
+    <div class="page-sub">25 команд · середня по компанії 7.21 · клікни на команду для переходу до детального аналізу</div>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="chart-wrap"><canvas id="rankChart"></canvas></div>
+    <div class="footnote">Горизонтальна лінія — загальна середня (7.21). Клікни на стовпець для переходу до команди.</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Повний рейтинг</div>
+    <div id="rank-full-list"></div>
+  </div>
+</div>
+
+<!-- REQUESTS PAGE -->
+<div id="requests" class="pg">
+  <div class="page-header">
+    <div class="page-tag">ЗАПИТ ВІД КОМАНД</div>
+    <div class="page-title">Що допомагає і чого бракує</div>
+    <div class="page-sub">309 респондентів · травень 2025</div>
+  </div>
+
+  <div class="sec"><div class="sec-txt">Що найбільше допомагає освоювати AI</div></div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="bar-row"><div class="bar-lbl">Самостійні експерименти</div><div class="bar-track"><div class="bar-fill" style="width:74%;background:var(--green)"></div></div><div class="bar-pct" style="color:var(--green)">74%</div><div class="bar-vs" style="color:var(--text4)">230</div></div>
+    <div class="bar-row"><div class="bar-lbl">YouTube / статті</div><div class="bar-track"><div class="bar-fill" style="width:47%;background:#378ADD"></div></div><div class="bar-pct" style="color:#93c5fd">47%</div><div class="bar-vs" style="color:var(--text4)">144</div></div>
+    <div class="bar-row"><div class="bar-lbl">Поради колег</div><div class="bar-track"><div class="bar-fill" style="width:39%;background:#378ADD"></div></div><div class="bar-pct" style="color:#93c5fd">39%</div><div class="bar-vs" style="color:var(--text4)">119</div></div>
+    <div class="bar-row"><div class="bar-lbl">Корпоративне навчання</div><div class="bar-track"><div class="bar-fill" style="width:9%;background:var(--text4)"></div></div><div class="bar-pct" style="color:var(--text4)">9%</div><div class="bar-vs" style="color:var(--text4)">28</div></div>
+    <div class="bar-row"><div class="bar-lbl">Внутрішній чат Artificial Kiss</div><div class="bar-track"><div class="bar-fill" style="width:3%;background:var(--text4)"></div></div><div class="bar-pct" style="color:var(--text4)">3%</div><div class="bar-vs" style="color:var(--text4)">9</div></div>
+  </div>
+
+  <div class="sec"><div class="sec-txt">Якої підтримки найбільше бракує</div></div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="bar-row"><div class="bar-lbl">Більше часу на експерименти</div><div class="bar-track"><div class="bar-fill" style="width:43%;background:var(--purple)"></div></div><div class="bar-pct" style="color:var(--purple-l)">43%</div><div class="bar-vs" style="color:var(--text4)">134</div></div>
+    <div class="bar-row"><div class="bar-lbl">Практичні приклади для моїх задач</div><div class="bar-track"><div class="bar-fill" style="width:34%;background:#6d28d9"></div></div><div class="bar-pct" style="color:var(--purple-l)">34%</div><div class="bar-vs" style="color:var(--text4)">104</div></div>
+    <div class="bar-row"><div class="bar-lbl">Структуроване навчання або курс</div><div class="bar-track"><div class="bar-fill" style="width:29%;background:#5b21b6"></div></div><div class="bar-pct" style="color:#c4b5fd">29%</div><div class="bar-vs" style="color:var(--text4)">90</div></div>
+    <div class="bar-row"><div class="bar-lbl">Корпоративний доступ до інструментів</div><div class="bar-track"><div class="bar-fill" style="width:25%;background:#4c1d95"></div></div><div class="bar-pct" style="color:#c4b5fd">25%</div><div class="bar-vs" style="color:var(--text4)">78</div></div>
+    <div class="bar-row"><div class="bar-lbl">Живе ком'юніті / швидкі поради</div><div class="bar-track"><div class="bar-fill" style="width:21%;background:#3b0764"></div></div><div class="bar-pct" style="color:#a78bfa">21%</div><div class="bar-vs" style="color:var(--text4)">64</div></div>
+    <div class="bar-row"><div class="bar-lbl">Чіткі правила — що можна, що не можна</div><div class="bar-track"><div class="bar-fill" style="width:19%;background:#3b0764"></div></div><div class="bar-pct" style="color:#a78bfa">19%</div><div class="bar-vs" style="color:var(--text4)">58</div></div>
+    <div class="bar-row"><div class="bar-lbl">Нічого не бракує</div><div class="bar-track"><div class="bar-fill" style="width:14%;background:var(--green)"></div></div><div class="bar-pct" style="color:var(--green)">14%</div><div class="bar-vs" style="color:var(--text4)">43</div></div>
+  </div>
+
+  <div class="sec"><div class="sec-txt">Що заважає використовувати AI більше / краще</div></div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="bar-row"><div class="bar-lbl">Нічого не заважає</div><div class="bar-track"><div class="bar-fill" style="width:34%;background:var(--green)"></div></div><div class="bar-pct" style="color:var(--green)">34%</div><div class="bar-vs" style="color:var(--text4)">106</div></div>
+    <div class="bar-row"><div class="bar-lbl">Немає часу розбиратись</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--coral)"></div></div><div class="bar-pct" style="color:var(--coral)">20%</div><div class="bar-vs" style="color:var(--text4)">62</div></div>
+    <div class="bar-row"><div class="bar-lbl">Питання безпеки / конфіденційності</div><div class="bar-track"><div class="bar-fill" style="width:19%;background:#f97316"></div></div><div class="bar-pct" style="color:#fb923c">19%</div><div class="bar-vs" style="color:var(--text4)">60</div></div>
+    <div class="bar-row"><div class="bar-lbl">Результати ненадійні</div><div class="bar-track"><div class="bar-fill" style="width:17%;background:var(--amber)"></div></div><div class="bar-pct" style="color:var(--amber)">17%</div><div class="bar-vs" style="color:var(--text4)">53</div></div>
+    <div class="bar-row"><div class="bar-lbl">Немає корпоративного доступу</div><div class="bar-track"><div class="bar-fill" style="width:13%;background:var(--amber)"></div></div><div class="bar-pct" style="color:var(--amber)">13%</div><div class="bar-vs" style="color:var(--text4)">39</div></div>
+    <div class="bar-row"><div class="bar-lbl">Не розумію як застосувати до своїх задач</div><div class="bar-track"><div class="bar-fill" style="width:11%;background:#fcd34d"></div></div><div class="bar-pct" style="color:#fde68a">11%</div><div class="bar-vs" style="color:var(--text4)">34</div></div>
+    <div class="bar-row"><div class="bar-lbl">Не знаю з чого почати</div><div class="bar-track"><div class="bar-fill" style="width:9%;background:#fcd34d"></div></div><div class="bar-pct" style="color:#fde68a">9%</div><div class="bar-vs" style="color:var(--text4)">29</div></div>
+    <div class="bar-row"><div class="bar-lbl">Не бачу реальної користі</div><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--text4)"></div></div><div class="bar-pct" style="color:var(--text4)">2%</div><div class="bar-vs" style="color:var(--text4)">5</div></div>
+  </div>
+
+  <div class="sec"><div class="sec-txt">Теми з відкритих відповідей — пріоритети</div></div>
+  <div class="card">
+    <div class="corr-row"><div class="corr-desc">🔴 <b>Реальні кейси колег</b> «задача → рішення → результат» (+ активніший чат Artificial Kiss)</div><div class="corr-r" style="background:#3b0f0f;color:#fca5a5;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;min-width:54px;text-align:center">12 згадок</div></div>
+    <div class="corr-row"><div class="corr-desc">🔴 <b>Корпоративний доступ</b> до Claude / GPT Pro (ліміти токенів — критична проблема)</div><div class="corr-r" style="background:#3b0f0f;color:#fca5a5;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;min-width:54px;text-align:center">9 згадок</div></div>
+    <div class="corr-row"><div class="corr-desc">🟠 <b>Курси, воркшопи, інтенсиви</b> (не обов'язкові, але бажані)</div><div class="corr-r" style="background:#3b1f0a;color:#fdba74;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;min-width:54px;text-align:center">10 згадок</div></div>
+    <div class="corr-row"><div class="corr-desc">🟠 <b>Інтеграція AI з робочими інструментами</b> (ClickUp, Amplitude, Tableau, Figma, Notion, MCP)</div><div class="corr-r" style="background:#3b1f0a;color:#fdba74;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;min-width:54px;text-align:center">8 згадок</div></div>
+    <div class="corr-row"><div class="corr-desc">🟠 <b>Чіткі правила конфіденційності</b> — що можна передавати AI</div><div class="corr-r" style="background:#3b1f0a;color:#fdba74;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;min-width:54px;text-align:center">7 згадок</div></div>
+    <div class="corr-row"><div class="corr-desc">🟡 <b>Допомога з агентами, MCP, n8n, Claude Code, API</b></div><div class="corr-r" style="background:#2d2208;color:#fde68a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;min-width:54px;text-align:center">6 згадок</div></div>
+    <div class="corr-row"><div class="corr-desc">🟡 <b>Профільні приклади для конкретної ролі</b> (маркетинг, QA, юрист, рекрутер…)</div><div class="corr-r" style="background:#2d2208;color:#fde68a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;min-width:54px;text-align:center">4 згадки</div></div>
+    <div class="corr-row"><div class="corr-desc">🟡 <b>Індивідуальні / командні консультації</b> з AI-експертом</div><div class="corr-r" style="background:#2d2208;color:#fde68a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;min-width:54px;text-align:center">4 згадки</div></div>
+    <div class="corr-row"><div class="corr-desc">🟢 <b>Prompting guide / база знань</b> по промптам</div><div class="corr-r" style="background:#0f2a1a;color:#6ee7b7;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;min-width:54px;text-align:center">3 згадки</div></div>
+  </div>
+</div>
+
+<!-- AMBASSADORS PAGE -->
+<div id="ambassadors" class="pg">
+  <div class="page-header">
+    <div class="page-tag">АМБАСАДОРИ</div>
+    <div class="page-title">Потенційні амбасадори AI</div>
+    <div class="page-sub">60 залишили нік · 36 «Так, залюбки» · 23 «Залежить від формату» · 1 «Потім так»</div>
+  </div>
+
+  <div class="stats-row stats-3" style="margin-bottom:20px">
+    <div class="stat-card hi">
+      <div class="stat-lbl">Залишили нік</div>
+      <div class="stat-val">60</div>
+      <div class="stat-sub">з 309 опитаних (19%)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">«Так, залюбки»</div>
+      <div class="stat-val" style="color:var(--green)">36</div>
+      <div class="stat-sub">готові ділитись зараз</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">«Залежить від формату»</div>
+      <div class="stat-val" style="color:var(--amber)">23</div>
+      <div class="stat-sub">потрібен правильний формат</div>
+    </div>
+  </div>
+
+  <div class="sec"><div class="sec-txt">✅ Так, залюбки — 36 осіб</div></div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="amb-box" id="amb-yes"></div>
+  </div>
+
+  <div class="sec"><div class="sec-txt">⚡ Залежить від формату — 23 особи</div></div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="amb-box" id="amb-maybe"></div>
+  </div>
+
+  <div class="sec"><div class="sec-txt">⏳ Потім так</div></div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="amb-box" id="amb-later"></div>
+  </div>
+
+  <div class="sec"><div class="sec-txt">Розподіл по командах</div></div>
+  <div class="card">
+    <div id="amb-by-team"></div>
+  </div>
+</div>
+
 </main>
 
 </div>
@@ -646,6 +768,8 @@ function SP(id) {
   if (pg) {
     pg.classList.add('act');
     if (id.indexOf('t_') === 0) buildTeamPage(id, pg);
+    if (id === 'ranking') { buildRankList(); setTimeout(initRankChart, 50); }
+    if (id === 'ambassadors') buildAmbassadors();
   }
   var btn = document.getElementById('btn_' + id);
   if (btn) btn.classList.add('act');
@@ -855,6 +979,174 @@ function initDeptChart() {
 }
 
 // FIX 2: buildRanking uses SP() directly — no dead nav() calls
+
+
+// ===== RANKING CHART =====
+function initRankChart() {
+  const ctx = document.getElementById('rankChart');
+  if (!ctx || ctx._chartBuilt) return;
+  ctx._chartBuilt = true;
+  const sorted = [...TEAMS].sort((a,b) => b.conf - a.conf);
+  const labels = sorted.map(t => t.name.length > 22 ? t.name.slice(0,20)+'…' : t.name);
+  const data = sorted.map(t => t.conf);
+  const colors = data.map(v => v >= 8.5 ? '#085041' : v >= 8 ? '#1D9E75' : v >= 7.5 ? '#0F6E56' : v >= 7 ? '#378ADD' : v >= 6.5 ? '#f59e0b' : '#f43f5e');
+  const avgLine = sorted.map(() => 7.21);
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { type:'bar', data, backgroundColor: colors, borderRadius:6, borderSkipped:false, order:2 },
+        { type:'line', data: avgLine, borderColor:'#7c3aed', borderWidth:1.5, borderDash:[5,4], pointRadius:0, fill:false, order:1, tooltip:{enabled:false} }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{ filter:(i)=>i.datasetIndex===0, callbacks:{ label: c=>`Впевненість: ${c.raw}/10` } } },
+      scales:{
+        y:{ min:0, max:10, grid:{color:'#1e2235'}, ticks:{color:'#64748b',font:{size:10}} },
+        x:{ grid:{display:false}, ticks:{color:'#94a3b8',font:{size:8},maxRotation:45} }
+      },
+      onClick:(e,els)=>{ if(els.length && els[0].datasetIndex===0) SP(sorted[els[0].index].id); }
+    }
+  });
+}
+
+// ===== RANKING LIST =====
+function buildRankList() {
+  const el = document.getElementById('rank-full-list');
+  if (!el || el._built) return;
+  const sorted = [...TEAMS].sort((a,b) => b.conf - a.conf);
+  el.innerHTML = sorted.map((t,i) => {
+    const c = t.conf>=8.5?'#085041':t.conf>=8?'#1D9E75':t.conf>=7.5?'#0F6E56':t.conf>=7?'#378ADD':t.conf>=6.5?'#f59e0b':'#f43f5e';
+    const w = Math.round(t.conf/10*100);
+    const delta = (t.conf - 7.21).toFixed(2);
+    const dc = t.conf >= 7.21 ? 'var(--green)' : 'var(--coral)';
+    const ds = t.conf >= 7.21 ? `+${delta}` : delta;
+    return `<div class="rank-item" onclick="SP('${t.id}')">
+      <div class="rank-num">${i+1}</div>
+      <div class="rank-name">${t.name} <span style="font-size:9px;color:var(--text4)">n=${t.n}</span></div>
+      <div class="rank-track"><div class="rank-fill" style="width:${w}%;background:${c}"></div></div>
+      <div class="rank-val" style="color:${c}">${t.conf}</div>
+      <div style="font-size:9px;font-weight:700;color:${dc};min-width:36px;text-align:right">${ds}</div>
+    </div>`;
+  }).join('');
+  el.style.cssText = '';
+  // fix col widths for extra delta column
+  document.querySelectorAll('.rank-item').forEach(r => r.style.gridTemplateColumns = '22px 1fr 90px 44px 40px');
+  el._built = true;
+}
+
+// ===== AMBASSADORS =====
+// Full ambassador data: {nick, type, team, tools, comment}
+const AMBASSADORS = [
+  // ✅ Так, залюбки
+  {nick:'Nikster',type:'yes',team:'ASA/ASO Team',tools:'Claude · KissMyChat · GPT',comment:''},
+  {nick:'Peonika',type:'yes',team:'Botan',tools:'Claude · Gemini · GPT',comment:'Залюбки, якщо мої знання будуть реально корисні, а не просто базові'},
+  {nick:'@Lukianivska',type:'yes',team:'Chillio',tools:'Claude · GPT',comment:''},
+  {nick:'ollevche',type:'yes',team:'Chillio',tools:'Claude',comment:''},
+  {nick:'Hogdir',type:'yes',team:'Data Engineering',tools:'Claude · GPT',comment:''},
+  {nick:'Glitch',type:'yes',team:'Chillio',tools:'Claude · Gemini · GPT · +інше',comment:''},
+  {nick:'Faramir',type:'yes',team:'Chillio',tools:'Claude · GPT · +інше',comment:''},
+  {nick:'@silanah',type:'yes',team:'Chillio',tools:'Claude · Gemini · GPT',comment:'Маю декілька відео про AI на своєму каналі. Люблю цей топік — буду супер щаслива поділитись 🎥'},
+  {nick:'Makson',type:'yes',team:'Falcons Unit',tools:'KissMyChat · GPT',comment:'Поділитись не проблема, але я не такий паверюзер щоб багато чим було поділитись'},
+  {nick:'firefly',type:'yes',team:'Falcons Unit',tools:'Claude',comment:'Вже проводила два knowledge sharing серед дизайнерів — якщо є ще що корисне, можу провести ще'},
+  {nick:'@Kojima',type:'yes',team:'Falcons Unit',tools:'Claude · Gemini · GPT',comment:''},
+  {nick:'@lusenko',type:'yes',team:'Hyper Unit',tools:'Claude',comment:''},
+  {nick:'ansia',type:'yes',team:'Goats Unit',tools:'Claude · KissMyChat · Gemini · GPT',comment:''},
+  {nick:'flomaster',type:'yes',team:'Goats Unit',tools:'KissMyChat · Gemini',comment:''},
+  {nick:'Behelit',type:'yes',team:'Goats Unit',tools:'Claude · GPT · +інше',comment:''},
+  {nick:'quanty',type:'yes',team:'GDA Team',tools:'Claude · KissMyChat · Gemini · GPT',comment:''},
+  {nick:'basque',type:'yes',team:'Hyper Unit',tools:'Claude · KissMyChat · Gemini · GPT',comment:''},
+  {nick:'@valvefox',type:'yes',team:'Kivo Unit',tools:'Claude · Gemini · GPT',comment:'Більшість рішень одразу йдуть в роботу спільними зусиллями — решту всі теж добре розуміють в процесі'},
+  {nick:'Nyssa',type:'yes',team:'HR Department',tools:'Claude · KissMyChat · GPT',comment:''},
+  {nick:'deltaRo',type:'yes',team:'Spurs Unit',tools:'GPT · +інше',comment:'Думаю мої знання — general knowledge в моїй професії, але не проти поділитись'},
+  {nick:'Dantup',type:'yes',team:'Spurs Unit',tools:'Claude · Gemini · GPT · +інше',comment:''},
+  {nick:'Parallax',type:'yes',team:'Unicorns Unit',tools:'Claude · KissMyChat · Gemini · GPT · +інше',comment:''},
+  {nick:'Valentinos',type:'yes',team:'Unicorns Unit',tools:'Claude · KissMyChat',comment:'«За», проте більшість напрацювань ще на етапі створення. Але можемо зробити сінк — може буде цікаво'},
+  {nick:'@Karaoke',type:'yes',team:'PR Department',tools:'KissMyChat · Gemini',comment:'Так, але поки не знаю чи буде цікавим великій кількості людей — хіба моїй команді'},
+  {nick:'Avril',type:'yes',team:'Oasis Tribe',tools:'Claude · GPT',comment:''},
+  {nick:'MotionForce',type:'yes',team:'Oasis Tribe',tools:'Claude · GPT · +інше',comment:''},
+  {nick:'Cthulhu',type:'yes',team:'MarTech',tools:'Claude · Gemini · GPT',comment:''},
+  {nick:'Anzhy',type:'yes',team:'Mobile Chapter',tools:'Claude · Gemini · GPT',comment:''},
+  {nick:'Polygloshka',type:'yes',team:'Marketing',tools:'Claude · KissMyChat · GPT',comment:''},
+  {nick:'Jace',type:'yes',team:'Marketing',tools:'KissMyChat · Gemini · GPT',comment:''},
+  {nick:'yaplp',type:'yes',team:'Marketing',tools:'Claude · GPT',comment:'Вже активно ділимось та проводимо воркшопи'},
+  {nick:'Joey',type:'yes',team:'Marketing',tools:'KissMyChat',comment:'Мої приклади будуть актуальні (контекст ролі)'},
+  {nick:'Crane',type:'yes',team:'Tax Team',tools:'Claude',comment:''},
+  {nick:'@Kaneda',type:'yes',team:'Spurs Unit',tools:'Claude · Gemini · GPT · +інше',comment:''},
+  {nick:'Bukk',type:'yes',team:'Security Dept',tools:'Claude · Gemini · GPT',comment:''},
+  {nick:'@SovaSup',type:'yes',team:'S&B Department',tools:'GPT',comment:''},
+  // ⚡ Залежить від формату
+  {nick:'kvimli',type:'maybe',team:'GDA Team',tools:'Claude',comment:''},
+  {nick:'Teryk',type:'maybe',team:'Hyper Unit',tools:'Claude',comment:''},
+  {nick:'@Beggins',type:'maybe',team:'Hyper Unit',tools:'Claude · KissMyChat · GPT',comment:'Немає чіткої статті що допомогла, але можу показати на робочих кейсах — де впроваджував і при яких умовах'},
+  {nick:'marlin',type:'maybe',team:'Hyper Unit',tools:'Claude · KissMyChat · GPT',comment:''},
+  {nick:'yorgen',type:'maybe',team:'Chillio',tools:'Claude · Gemini · GPT',comment:''},
+  {nick:'@Dobryak',type:'maybe',team:'Capybaras Unit',tools:'Claude · GPT',comment:''},
+  {nick:'Gudzyk',type:'maybe',team:'Botan',tools:'Claude · Gemini · GPT',comment:''},
+  {nick:'@Velox',type:'maybe',team:'Capybaras Unit',tools:'Claude · KissMyChat · GPT',comment:''},
+  {nick:'Pill',type:'maybe',team:'Design Chapter',tools:'Claude · GPT',comment:''},
+  {nick:'Shputya',type:'maybe',team:'Goats Unit',tools:'Claude · KissMyChat · Gemini · GPT',comment:''},
+  {nick:'Medeiia',type:'maybe',team:'HR Department',tools:'Claude · KissMyChat · Gemini · GPT',comment:''},
+  {nick:'aligator',type:'maybe',team:'Spurs Unit',tools:'Claude · GPT · +інше',comment:''},
+  {nick:'MuseCatcher',type:'maybe',team:'Oasis Tribe',tools:'Claude · Gemini · GPT',comment:''},
+  {nick:'Capsy',type:'maybe',team:'PR Department',tools:'Claude · GPT · +інше',comment:''},
+  {nick:'Xesht',type:'maybe',team:'Non Mobile Chapter',tools:'Claude · GPT',comment:''},
+  {nick:'Tatarin',type:'maybe',team:'Oasis Tribe',tools:'Claude · Gemini',comment:''},
+  {nick:'@Escaril',type:'maybe',team:'MarTech',tools:'Claude · KissMyChat · Gemini',comment:''},
+  {nick:'Carioca',type:'maybe',team:'Operations Dept',tools:'Claude · KissMyChat · Gemini · GPT',comment:''},
+  {nick:'Oneil',type:'maybe',team:'Spurs Unit',tools:'GPT · +інше',comment:'Не впевнений що маю унікальні AI-скіли зараз, але коли з\'являться — не проти поділитись в чаті або на iOS міті'},
+  {nick:'Oniks',type:'maybe',team:'Spurs Unit',tools:'Gemini · GPT',comment:''},
+  {nick:'Pheebs',type:'maybe',team:'—',tools:'Claude · GPT',comment:''},
+  // ⏳ Потім так
+  {nick:'Anasteisha',type:'later',team:'Marketing',tools:'Claude · KissMyChat · GPT',comment:''},
+];
+
+function buildAmbassadors() {
+  const yesEl = document.getElementById('amb-yes');
+  const maybeEl = document.getElementById('amb-maybe');
+  const laterEl = document.getElementById('amb-later');
+  const byTeam = document.getElementById('amb-by-team');
+  if (!yesEl || yesEl._built) return;
+
+  const card = (a, borderColor) => `
+    <div style="background:var(--card2);border:1px solid ${borderColor}33;border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:5px">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="font-family:'Unbounded',sans-serif;font-size:11px;font-weight:700;color:${borderColor}">${a.nick}</span>
+        <span style="font-size:9px;color:var(--text4);background:var(--border);padding:1px 7px;border-radius:10px">${a.team}</span>
+      </div>
+      <div style="font-size:10px;color:var(--text3)">${a.tools}</div>
+      ${a.comment ? `<div style="font-size:10px;color:var(--text2);line-height:1.5;padding-top:3px;border-top:1px solid var(--line)">${a.comment}</div>` : ''}
+    </div>`;
+
+  const grid = (items, color) => `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px">${items.map(a => card(a, color)).join('')}</div>`;
+
+  yesEl.innerHTML = grid(AMBASSADORS.filter(a=>a.type==='yes'), '#10b981');
+  maybeEl.innerHTML = grid(AMBASSADORS.filter(a=>a.type==='maybe'), '#f59e0b');
+  laterEl.innerHTML = grid(AMBASSADORS.filter(a=>a.type==='later'), '#64748b');
+
+  // by team
+  const teamMap = {};
+  AMBASSADORS.filter(a=>a.type!=='later').forEach(a => {
+    const t = a.team || '—';
+    if (!teamMap[t]) teamMap[t] = {yes:[], maybe:[]};
+    teamMap[t][a.type].push(a.nick);
+  });
+  const sorted = Object.entries(teamMap).sort((a,b) => (b[1].yes.length+b[1].maybe.length)-(a[1].yes.length+a[1].maybe.length));
+  byTeam.innerHTML = sorted.map(([team, {yes, maybe}]) => {
+    const total = yes.length + maybe.length;
+    return `<div class="team-stat">
+      <div class="team-stat-lbl">${team}</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        ${yes.length ? `<span style="font-size:10px;color:var(--green);font-weight:600">✅ ${yes.length}</span>` : ''}
+        ${maybe.length ? `<span style="font-size:10px;color:var(--amber);font-weight:600">⚡ ${maybe.length}</span>` : ''}
+        <span style="font-size:10px;color:var(--text4)">(${total})</span>
+      </div>
+    </div>`;
+  }).join('');
+  yesEl._built = true;
+}
 
 window.addEventListener('load', function() {
   initDeptChart();
